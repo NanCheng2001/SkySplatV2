@@ -8,15 +8,12 @@
 
   <!-- Anonymous & ECCV-safe meta -->
   <meta name="robots" content="noindex, nofollow">
-  <!-- <meta name="description"
-        content="SkySplat-OV enables open-vocabulary 3D scene understanding from sparse-view satellite images via language-guided Gaussian splatting."> -->
 
   <!-- Styles -->
   <link rel="stylesheet" href="static/css/bulma.min.css">
   <link rel="stylesheet" href="static/css/index.css">
 
   <!-- Icons -->
-  <!-- <link rel="stylesheet" href="static/css/fontawesome.all.min.css"> -->
   <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
@@ -25,6 +22,7 @@
   <script defer src="static/js/index.js"></script>
 
   <style>
+    /* ===== Image Compare ===== */
     .image-compare-container {
       position: relative;
       width: 100%;
@@ -42,50 +40,51 @@
       top: 0;
       left: 0;
       clip-path: inset(0 50% 0 0);
+      -webkit-clip-path: inset(0 50% 0 0); /* Safari */
     }
     .slider {
       width: 100%;
       margin-top: 12px;
     }
-  /* ===== GitHub button: pure black + clickable feeling ===== */
-  .publication-links .button.is-dark {
-    background-color: #000000 !important;
-    border-color: #000000 !important;
-    color: #ffffff !important;
-    opacity: 1 !important;
-    cursor: pointer;
-    transition: background-color 0.15s ease, transform 0.1s ease;
-  }
-  
-  .publication-links .button.is-dark:hover {
-    background-color: #111111 !important;
-    border-color: #111111 !important;
-  }
-  
-  .publication-links .button.is-dark:active {
-    transform: translateY(1px);
-  }
 
+    /* ===== GitHub button styling ===== */
+    .publication-links .button.is-dark {
+      background-color: #000000 !important;
+      border-color: #000000 !important;
+      color: #ffffff !important;
+      opacity: 1 !important;
+      cursor: pointer;
+      transition: background-color 0.15s ease, transform 0.1s ease;
+    }
+    .publication-links .button.is-dark:hover {
+      background-color: #111111 !important;
+      border-color: #111111 !important;
+    }
+    .publication-links .button.is-dark:active {
+      transform: translateY(1px);
+    }
   </style>
   
-<script>
-function slideCompare(val, imgId) {
-  const img = document.getElementById(imgId);
-  img.style.clipPath = `inset(0 ${100 - val}% 0 0)`;
-}
-</script>
+  <script>
+  // 单图滑块（可选）
+  function slideCompare(val, imgId) {
+    const img = document.getElementById(imgId);
+    img.style.clipPath = `inset(0 ${100 - val}% 0 0)`;
+    img.style.webkitClipPath = `inset(0 ${100 - val}% 0 0)`;
+  }
 
-<script>
-function slideCompareMulti(val, imgIds) {
-  const percent = 100 - val;
-  imgIds.forEach(id => {
-    const img = document.getElementById(id);
-    if (img) {
-      img.style.clipPath = `inset(0 ${percent}% 0 0)`;
-    }
-  });
-}
-</script>
+  // 多图滑块
+  function slideCompareMulti(val, imgIds) {
+    const percent = 100 - Number(val);
+    imgIds.forEach(id => {
+      const img = document.getElementById(id);
+      if (img) {
+        img.style.clipPath = `inset(0 ${percent}% 0 0)`;
+        img.style.webkitClipPath = `inset(0 ${percent}% 0 0)`; // Safari兼容
+      }
+    });
+  }
+  </script>
 </head>
 
 <body>
@@ -100,23 +99,6 @@ function slideCompareMulti(val, imgIds) {
       </h1>
 
       <div class="publication-links">
-
-        <!-- <span class="link-block">
-          <a href="static/pdfs/paper.pdf" target="_blank"
-             class="button is-normal is-rounded is-dark">
-            <span class="icon"><i class="fas fa-file-pdf"></i></span>
-            <span>Paper</span>
-          </a>
-        </span>
-
-        <span class="link-block">
-          <a href="https://arxiv.org/abs/XXXX.XXXXX" target="_blank"
-             class="button is-normal is-rounded is-dark">
-            <span class="icon"><i class="ai ai-arxiv"></i></span>
-            <span>arXiv</span>
-          </a>
-        </span> -->
-
         <span class="link-block">
             <a class="button is-normal is-rounded is-dark"
                href="javascript:void(0);"
@@ -125,7 +107,6 @@ function slideCompareMulti(val, imgIds) {
             <span>Code (Coming Soon)</span>
           </a>
         </span>
-
       </div>
     </div>
   </div>
@@ -135,14 +116,12 @@ function slideCompareMulti(val, imgIds) {
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <!-- 图片 -->
       <figure class="image" style="margin-bottom: 14px;">
         <img src="static/images/fig1_top.png"
              alt="SkySplatV2 Teaser"
              style="width:100%; border-radius:12px;">
       </figure>
 
-      <!-- 文字说明 -->
       <div class="content has-text-justified">
         <p>
           Comparison with existing methods.
@@ -154,7 +133,6 @@ function slideCompareMulti(val, imgIds) {
     </div>
   </div>
 </section>
-
 
 <!-- ================= Brief Introduction ================= -->
 <section class="section is-light">
@@ -181,7 +159,6 @@ function slideCompareMulti(val, imgIds) {
            style="width:100%; border-radius:12px;">
     </div>
 
-    <!-- ===== Pipeline Description (placed directly under the figure) ===== -->
     <div class="content has-text-justified" style="margin-top: 14px;">
       <p>
       We propose SkySplat++, a self-supervised and generalizable framework that avoids per-scene optimization. 
@@ -196,8 +173,6 @@ function slideCompareMulti(val, imgIds) {
   </div>
 </section>
 
-
-  
 <!-- ================= Comparison with Feed-forward Methods ================= -->
 <section class="section is-light">
   <div class="container is-max-desktop">
@@ -207,29 +182,20 @@ function slideCompareMulti(val, imgIds) {
 
     <!-- ================= AOI: JAX072 ================= -->
     <h3 class="title is-5 has-text-centered">AOI: JAX072</h3>
-
     <div class="columns is-gapless is-variable is-2">
       <div class="column compare-column">
         <p class="has-text-centered method-title">
           MVSplat | HiSplat | SkySplat | SkySplatV2 (Ours)
         </p>
-
         <div class="image-compare-container">
-          <!-- base -->
           <img src="static/images/MVSplat_JAX_Tile_072-image.png">
-
-          <!-- overlays -->
           <img src="static/images/HiSplat_JAX_Tile_072-image.png"
-               class="img-front"
-               id="jax072_hisplat">
+               class="img-front" id="jax072_hisplat">
           <img src="static/images/SkySplat_JAX_Tile_072-image.png"
-               class="img-front"
-               id="jax072_skysplat">
+               class="img-front" id="jax072_skysplat">
           <img src="static/images/SkySplatV2_JAX_Tile_072-image.png"
-               class="img-front"
-               id="jax072_skysplatv2">
+               class="img-front" id="jax072_skysplatv2">
         </div>
-
         <input type="range" min="0" max="100" value="50"
                class="slider"
                oninput="slideCompareMulti(this.value,
@@ -237,31 +203,22 @@ function slideCompareMulti(val, imgIds) {
       </div>
     </div>
 
-    <br>
-
     <!-- ================= AOI: JAX079 ================= -->
     <h3 class="title is-5 has-text-centered">AOI: JAX079</h3>
-
     <div class="columns is-gapless is-variable is-2">
       <div class="column compare-column">
         <p class="has-text-centered method-title">
           MVSplat | HiSplat | SkySplat | SkySplatV2 (Ours)
         </p>
-
         <div class="image-compare-container">
           <img src="static/images/MVSplat_JAX_Tile_079-image.png">
-
           <img src="static/images/HiSplat_JAX_Tile_079-image.png"
-               class="img-front"
-               id="jax079_hisplat">
+               class="img-front" id="jax079_hisplat">
           <img src="static/images/SkySplat_JAX_Tile_079-image.png"
-               class="img-front"
-               id="jax079_skysplat">
+               class="img-front" id="jax079_skysplat">
           <img src="static/images/SkySplatV2_JAX_Tile_079-image.png"
-               class="img-front"
-               id="jax079_skysplatv2">
+               class="img-front" id="jax079_skysplatv2">
         </div>
-
         <input type="range" min="0" max="100" value="50"
                class="slider"
                oninput="slideCompareMulti(this.value,
@@ -269,47 +226,35 @@ function slideCompareMulti(val, imgIds) {
       </div>
     </div>
 
-    <br>
-
     <!-- ================= AOI: OMA212 ================= -->
     <h3 class="title is-5 has-text-centered">AOI: OMA212</h3>
-
     <div class="columns is-gapless is-variable is-2">
       <div class="column compare-column">
         <p class="has-text-centered method-title">
           MVSplat | HiSplat | SkySplat | SkySplatV2 (Ours)
         </p>
-
         <div class="image-compare-container">
           <img src="static/images/MVSplat_OMA_Tile_212-image.png">
-
           <img src="static/images/HiSplat_OMA_Tile_212-image.png"
-               class="img-front"
-               id="oma212_hisplat">
+               class="img-front" id="oma212_hisplat">
           <img src="static/images/SkySplat_OMA_Tile_212-image.png"
-               class="img-front"
-               id="oma212_skysplat">
+               class="img-front" id="oma212_skysplat">
           <img src="static/images/SkySplatV2_OMA_Tile_212-image.png"
-               class="img-front"
-               id="oma212_skysplatv2">
+               class="img-front" id="oma212_skysplatv2">
         </div>
-
         <input type="range" min="0" max="100" value="50"
                class="slider"
                oninput="slideCompareMulti(this.value,
                ['oma212_hisplat','oma212_skysplat','oma212_skysplatv2'])">
       </div>
     </div>
-
   </div>
 </section>
-
 
 <!-- ================= Results ================= -->
 <section class="section is-light">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Results</h2>
-
     <div class="has-text-centered">
       <img src="static/images/fig6_8_AoIs.png"
            alt="Experimental Results"
@@ -318,32 +263,22 @@ function slideCompareMulti(val, imgIds) {
   </div>
 </section>
 
-  
 <!-- ================= Footer ================= -->
-
-  <footer class="footer">
+<footer class="footer">
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-8">
         <div class="content">
-
           <p>
             This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
             You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
             Commons Attribution-ShareAlike 4.0 International License</a>.
           </p>
-
         </div>
       </div>
     </div>
   </div>
 </footer>
-
-<!-- Statcounter tracking code -->
-  
-<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
-
-    <!-- End of Statcounter Code -->
 
 </body>
 </html>
