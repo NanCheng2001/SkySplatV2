@@ -188,9 +188,9 @@ body { background: #f8f8f8; }
               const img = document.getElementById(`${aoiId}_${imgId}`);
               img.style.clipPath = `inset(0 ${Math.min(Math.max(100-val,0),100)}% 0 0)`;
 
-              // 标签跟随图片可见部分移动
+              // 标签跟随图片可见部分移动，偏移一点让文字不贴边
               const label = document.getElementById(`${aoiId}_label${i}`);
-              label.style.left = `${val}%`;
+              label.style.left = `calc(${val}% - 50px)`; 
           }
       }
 
