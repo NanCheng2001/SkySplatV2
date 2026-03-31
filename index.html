@@ -46,23 +46,11 @@ body { background: #f8f8f8; }
 .image-compare-container img.top { z-index: 4; }
 
 /* ===== Method Labels on Images ===== */
-.image-label {
-  position: absolute;
-  top: 8px;
-  padding: 3px 8px;
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  font-weight: bold;
-  border-radius: 6px;
-  font-size: 0.9em;
-  pointer-events: none;
-  z-index: 10;
-  transition: left 0.2s ease;
-  text-align: left;
-}
+/* 隐藏滑块图上的文字 */
 .image-label {
   display: none !important;
 }
+
 /* ===== Slider Container ===== */
 .slider-container {
   max-width: 900px;
@@ -190,14 +178,6 @@ body { background: #f8f8f8; }
               const imgId = i===0 ? "bottom" : i===1 ? "middle1" : i===2 ? "middle2" : "top";
               const img = document.getElementById(`${aoiId}_${imgId}`);
               img.style.clipPath = `inset(0 ${Math.min(Math.max(100-val,0),100)}% 0 0)`;
-
-              // 标签跟随图片可见部分移动，左侧对齐
-              const label = document.getElementById(`${aoiId}_label${i}`);
-              const offset = (i===3 ? 0 : 0); // SkySplat++ 不偏移，覆盖其他
-              label.style.left = `calc(${val}% - ${offset}px)`;
-
-              // SkySplat++ 标签始终在最上
-              if(i===3) label.classList.add("top-label");
           }
       }
 
@@ -205,15 +185,11 @@ body { background: #f8f8f8; }
           const container = document.getElementById("aoi-containers");
 
           aois.forEach(aoi=>{
-              // 图片叠加 + 标签
+              // 图片叠加
               let imagesHTML = `<div class="image-compare-container" id="${aoi.id}_container">`;
               aoi.paths.forEach((path, idx)=>{
                   const imgId = idx===0 ? "bottom" : idx===1 ? "middle1" : idx===2 ? "middle2" : "top";
-                  const labelClass = idx===3 ? "image-label top-label" : "image-label";
-                  imagesHTML += `
-                      <img src="${path}" class="${imgId}" id="${aoi.id}_${imgId}">
-                      <div class="${labelClass}" id="${aoi.id}_label${idx}">${aoi.methods[idx]}</div>
-                  `;
+                  imagesHTML += `<img src="${path}" class="${imgId}" id="${aoi.id}_${imgId}">`;
               });
               imagesHTML += `</div>`;
 
@@ -222,7 +198,6 @@ body { background: #f8f8f8; }
               aoi.methods.forEach((method, idx)=>{
                   sliderHTML += `
                       <div style="flex:1; text-align:center;">
-                          <div style="margin-bottom:4px; font-weight:bold;">${method}</div>
                           <input type="range" min="0" max="100" value="100" id="${aoi.id}_slider${idx+1}">
                       </div>`;
               });
@@ -231,7 +206,7 @@ body { background: #f8f8f8; }
               container.innerHTML += `<h3 class="title is-5 has-text-centered">AOI: ${aoi.name}</h3>${imagesHTML}${sliderHTML}`;
           });
 
-          // 绑定滑块事件，并初始化显示SkySplat++（滑块全拉满）
+          // 绑定滑块事件，并初始化显示
           aois.forEach(aoi=>{
               for(let i=0;i<4;i++){
                   const slider = document.getElementById(`${aoi.id}_slider${i+1}`);
