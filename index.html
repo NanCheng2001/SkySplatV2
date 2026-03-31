@@ -25,7 +25,7 @@ body { background: #f8f8f8; }
   margin: 20px auto;
   border-radius: 12px;
   overflow: hidden;
-  height: 400px; /* 固定高度 */
+  height: 400px;
 }
 
 .image-compare-container img {
@@ -35,12 +35,12 @@ body { background: #f8f8f8; }
   object-fit: cover;
 }
 
-/* 三图滑块遮罩 */
-.image-compare-container img.top {
+/* 顶层遮罩 */
+.image-compare-container img.overlay {
   position: absolute;
   top: 0;
   left: 0;
-  width: 50%; /* 初始滑块值 */
+  width: 50%;
 }
 
 /* 方法名称 */
@@ -127,7 +127,7 @@ body { background: #f8f8f8; }
     <h2 class="title is-3 has-text-centered">Brief Introduction</h2>
     <div class="content has-text-justified">
       <p>
-        Abstract. Scene reconstruction from sparse-view satellite images remains challenging due to insufficient geometric constraints. 
+        Scene reconstruction from sparse-view satellite images remains challenging due to insufficient geometric constraints. 
         SkySplat++ extends our previous 3DGS method, refining Gaussian representations in a coarse-to-fine manner for robust large-scale structure and fine textures. 
         Height-guided hierarchical cost volumes and hybrid height supervision improve accuracy, achieving significant speedup and lower MAE compared to baselines.
       </p>
@@ -143,7 +143,7 @@ body { background: #f8f8f8; }
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Comparison with Feed-forward Methods</h2>
 
-    <!-- ================= AOI JAX072 三方法示例 ================= -->
+    <!-- ================= AOI JAX072 三方法滑块 ================= -->
     <h3 class="title is-5 has-text-centered">AOI: JAX072 (Three Methods)</h3>
 
     <div class="method-labels">
@@ -153,25 +153,24 @@ body { background: #f8f8f8; }
     </div>
     <div class="image-compare-container" id="jax072_3_container">
       <img src="static/images/MVSplat_JAX_Tile_072-image.png" class="bottom">
-      <img src="static/images/HiSplat_JAX_Tile_072-image.png" class="middle top" id="jax072_3_middle">
-      <img src="static/images/SkySplatV2_JAX_Tile_072-image.png" class="top top" id="jax072_3_top">
+      <img src="static/images/HiSplat_JAX_Tile_072-image.png" class="overlay" id="jax072_middle">
+      <img src="static/images/SkySplatV2_JAX_Tile_072-image.png" class="overlay" id="jax072_top">
     </div>
     <div class="slider-container">
-      <input type="range" min="0" max="100" value="50" id="jax072_3_slider1">
-      <input type="range" min="0" max="100" value="50" id="jax072_3_slider2">
+      <input type="range" min="0" max="100" value="50" id="jax072_slider1">
+      <input type="range" min="0" max="100" value="50" id="jax072_slider2">
       <p>Slider1: HiSplat vs MVSplat, Slider2: SkySplat++ vs HiSplat</p>
     </div>
 
-    <!-- ================= AOI JAX079 双方法示例 ================= -->
+    <!-- ================= AOI JAX079 双方法滑块 ================= -->
     <h3 class="title is-5 has-text-centered">AOI: JAX079</h3>
-
     <div class="method-labels">
       <span>SkySplat</span>
       <span>SkySplat++</span>
     </div>
     <div class="image-compare-container" id="jax079_2_container">
       <img src="static/images/SkySplat_JAX_Tile_079-image.png" id="jax079_2_0">
-      <img src="static/images/SkySplatV2_JAX_Tile_079-image.png" id="jax079_2_1">
+      <img src="static/images/SkySplatV2_JAX_Tile_079-image.png" class="overlay" id="jax079_2_1">
     </div>
     <div class="slider-container">
       <input type="range" min="0" max="100" value="50" id="jax079_2_slider">
@@ -209,12 +208,12 @@ body { background: #f8f8f8; }
 
 <script>
 // ===== 双图滑块 =====
-function updateTwoImages(aoiId, sliderValue){
-  const img2 = document.getElementById(aoiId+"_1");
-  img2.style.width = sliderValue + "%";
+function updateTwoImages(aoiId, value){
+  const img = document.getElementById(aoiId+"_1");
+  img.style.width = value + "%";
 }
 
-function initSlider(aoiId){
+function initTwoSlider(aoiId){
   const slider = document.getElementById(aoiId+"_slider");
   slider.addEventListener("input", ()=> updateTwoImages(aoiId, Number(slider.value)));
   updateTwoImages(aoiId, Number(slider.value));
@@ -227,7 +226,9 @@ function updateThreeImages(aoiId){
   const middle = document.getElementById(aoiId+"_middle");
   const top = document.getElementById(aoiId+"_top");
 
+  // 中间方法覆盖比例
   middle.style.width = slider1.value + "%";
+  // 顶部方法覆盖比例
   top.style.width = slider2.value + "%";
 }
 
@@ -238,10 +239,10 @@ function initThreeSlider(aoiId){
   updateThreeImages(aoiId);
 }
 
-// 初始化所有滑块
+// 初始化
 window.onload = function(){
   const twoSliders = ['jax079_2'];
-  twoSliders.forEach(id => initSlider(id));
+  twoSliders.forEach(id => initTwoSlider(id));
 
   const threeSliders = ['jax072_3'];
   threeSliders.forEach(id => initThreeSlider(id));
