@@ -35,10 +35,11 @@ body { background: #f8f8f8; }
   height: 100%;
   width: 100%;
   object-fit: cover;
-  clip-path: inset(0 100% 0 0);
+  clip-path: inset(0 100% 0 0); /* 初始完全隐藏 */
   transition: clip-path 0.2s ease;
 }
 
+/* 叠放顺序 bottom -> middle1 -> middle2 -> top */
 .image-compare-container img.bottom { z-index: 1; clip-path: inset(0 0 0 0); }
 .image-compare-container img.middle1 { z-index: 2; }
 .image-compare-container img.middle2 { z-index: 3; }
@@ -54,7 +55,7 @@ body { background: #f8f8f8; }
   font-size: 0.9rem;
 }
 
-/* 单滑块 */
+/* 三滑块 */
 .slider-container {
   max-width: 900px;
   margin: 5px auto 30px auto;
@@ -172,30 +173,33 @@ body { background: #f8f8f8; }
         }
       ];
 
-      function updateImagesSingleSlider(aoiId){
-        const val = document.getElementById(aoiId+"_slider").value;
-        const percent = val; // 0~100
+      function updateImagesTripleSlider(aoiId){
+        const val1 = document.getElementById(aoiId+"_slider1").value;
+        const val2 = document.getElementById(aoiId+"_slider2").value;
+        const val3 = document.getElementById(aoiId+"_slider3").value;
 
-        // bottom 永远全显示
-        // middle1/middle2/top 依滑块线性叠加
-        document.getElementById(aoiId+"_middle1").style.clipPath = `inset(0 ${100-percent}% 0 0)`;
-        document.getElementById(aoiId+"_middle2").style.clipPath = `inset(0 ${100-percent}% 0 0)`;
-        document.getElementById(aoiId+"_top").style.clipPath = `inset(0 ${100-percent}% 0 0)`;
+        // 分别控制 middle1 / middle2 / top
+        document.getElementById(aoiId+"_middle1").style.clipPath = `inset(0 ${100-val1}% 0 0)`;
+        document.getElementById(aoiId+"_middle2").style.clipPath = `inset(0 ${100-val2}% 0 0)`;
+        document.getElementById(aoiId+"_top").style.clipPath = `inset(0 ${100-val3}% 0 0)`;
       }
 
-      function initSingleSlider(aoiId){
-        const slider = document.getElementById(aoiId+"_slider");
-        slider.addEventListener("input",()=>updateImagesSingleSlider(aoiId));
-        updateImagesSingleSlider(aoiId);
+      function initTripleSlider(aoiId){
+        ["slider1","slider2","slider3"].forEach(s=>{
+          document.getElementById(aoiId+"_"+s).addEventListener("input",()=>updateImagesTripleSlider(aoiId));
+        });
+        updateImagesTripleSlider(aoiId);
       }
 
       window.onload = function(){
         const container = document.getElementById("aoi-containers");
         aois.forEach(aoi=>{
+          // 方法标签
           let labelsHTML = '<div class="method-labels">';
           aoi.methods.forEach(m=>labelsHTML+=`<span>${m}</span>`);
           labelsHTML += '</div>';
 
+          // 图片叠放
           let imagesHTML = `
           <div class="image-compare-container" id="${aoi.id}_container">
             <img src="${aoi.paths[0]}" class="bottom">
@@ -204,13 +208,20 @@ body { background: #f8f8f8; }
             <img src="${aoi.paths[3]}" class="top" id="${aoi.id}_top">
           </div>`;
 
-          let sliderHTML = `
+          // 三滑块
+          let slidersHTML = `
           <div class="slider-container">
-            <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider">
+            <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider1">
+          </div>
+          <div class="slider-container">
+            <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider2">
+          </div>
+          <div class="slider-container">
+            <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider3">
           </div>`;
 
-          container.innerHTML += `<h3 class="title is-5 has-text-centered">AOI: ${aoi.name}</h3>${labelsHTML}${imagesHTML}${sliderHTML}`;
-          initSingleSlider(aoi.id);
+          container.innerHTML += `<h3 class="title is-5 has-text-centered">AOI: ${aoi.name}</h3>${labelsHTML}${imagesHTML}${slidersHTML}`;
+          initTripleSlider(aoi.id);
         });
       }
     </script>
