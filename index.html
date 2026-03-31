@@ -185,14 +185,7 @@ body { background: #f8f8f8; }
           for(let i=0;i<4;i++){
               const val = parseInt(document.getElementById(`${aoiId}_slider${i+1}`).value);
               const imgId = i===0 ? "bottom" : i===1 ? "middle1" : i===2 ? "middle2" : "top";
-              const img = document.getElementById(`${aoiId}_${imgId}`);
-              const label = document.getElementById(`${aoiId}_label${i}`);
-
-              // 更新 clip-path
-              img.style.clipPath = `inset(0 ${Math.min(Math.max(100-val,0),100)}% 0 0)`;
-
-              // 滑块最左边（val=0）文字消失，否则显示
-              label.style.display = (val === 0) ? "none" : "block";
+              document.getElementById(`${aoiId}_${imgId}`).style.clipPath = `inset(0 ${Math.min(Math.max(100-val,0),100)}% 0 0)`;
           }
       }
 
