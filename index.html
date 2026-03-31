@@ -25,15 +25,25 @@ body { background: #f8f8f8; }
   margin: 20px auto;
   border-radius: 12px;
   overflow: hidden;
+  height: 400px; /* 设置固定高度保证图片显示 */
 }
+
 .image-compare-container img {
   width: 100%;
+  height: 100%;
   display: block;
+  object-fit: cover;
+}
+
+/* 只有上层图片使用 absolute 来实现滑块效果 */
+.image-compare-container img:last-child {
   position: absolute;
   top: 0;
   left: 0;
-  object-fit: cover;
+  width: 50%; /* 初始滑块位置 */
 }
+
+/* 方法名称 */
 .method-labels {
   display: flex;
   justify-content: space-between;
@@ -43,7 +53,7 @@ body { background: #f8f8f8; }
   font-size: 0.9rem;
 }
 
-/* ===== Slider ===== */
+/* Slider */
 .slider-container {
   max-width: 900px;
   margin: 5px auto 30px auto;
@@ -53,7 +63,7 @@ body { background: #f8f8f8; }
   width: 80%;
 }
 
-/* ===== GitHub button styling ===== */
+/* GitHub button styling */
 .publication-links .button.is-dark {
   background-color: #000 !important;
   border-color: #000 !important;
@@ -258,7 +268,6 @@ body { background: #f8f8f8; }
 <script>
 // ===== 两图滑块 =====
 function updateTwoImages(aoiId, sliderValue){
-  const img1 = document.getElementById(aoiId+"_0");
   const img2 = document.getElementById(aoiId+"_1");
   img2.style.width = sliderValue + "%";
 }
