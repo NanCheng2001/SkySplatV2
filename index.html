@@ -58,7 +58,11 @@ body { background: #f8f8f8; }
   pointer-events: none;
   z-index: 10;
   transition: left 0.2s ease;
+  text-align: left;
 }
+
+/* SkySplat++ 标签始终在最前 */
+.image-label.top-label { z-index: 15; }
 
 /* ===== Slider Container ===== */
 .slider-container {
@@ -188,9 +192,13 @@ body { background: #f8f8f8; }
               const img = document.getElementById(`${aoiId}_${imgId}`);
               img.style.clipPath = `inset(0 ${Math.min(Math.max(100-val,0),100)}% 0 0)`;
 
-              // 标签跟随图片可见部分移动，偏移一点让文字不贴边
+              // 标签跟随图片可见部分移动，左侧对齐
               const label = document.getElementById(`${aoiId}_label${i}`);
-              label.style.left = `calc(${val}% - 50px)`; 
+              const offset = (i===3 ? 0 : 0); // SkySplat++ 不偏移，覆盖其他
+              label.style.left = `calc(${val}% - ${offset}px)`;
+
+              // SkySplat++ 标签始终在最上
+              if(i===3) label.classList.add("top-label");
           }
       }
 
@@ -202,9 +210,10 @@ body { background: #f8f8f8; }
               let imagesHTML = `<div class="image-compare-container" id="${aoi.id}_container">`;
               aoi.paths.forEach((path, idx)=>{
                   const imgId = idx===0 ? "bottom" : idx===1 ? "middle1" : idx===2 ? "middle2" : "top";
+                  const labelClass = idx===3 ? "image-label top-label" : "image-label";
                   imagesHTML += `
                       <img src="${path}" class="${imgId}" id="${aoi.id}_${imgId}">
-                      <div class="image-label" id="${aoi.id}_label${idx}">${aoi.methods[idx]}</div>
+                      <div class="${labelClass}" id="${aoi.id}_label${idx}">${aoi.methods[idx]}</div>
                   `;
               });
               imagesHTML += `</div>`;
