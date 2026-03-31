@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>SkySplat-OV: Generalizable Language Gaussian Splatting for Open-Vocabulary Scene Understanding from Sparse Satellite Views</title>
+  <title>SkySplat++: Hierarchical 3D Gaussian Splatting for Generalizable Sparse-View Reconstruction from Multi-Temporal Satellite Imagery</title>
 
   <!-- Anonymous & ECCV-safe meta -->
   <meta name="robots" content="noindex, nofollow">
-  <meta name="description"
-        content="SkySplat-OV enables open-vocabulary 3D scene understanding from sparse-view satellite images via language-guided Gaussian splatting.">
+  <!-- <meta name="description"
+        content="SkySplat-OV enables open-vocabulary 3D scene understanding from sparse-view satellite images via language-guided Gaussian splatting."> -->
 
   <!-- Styles -->
   <link rel="stylesheet" href="static/css/bulma.min.css">
@@ -84,7 +84,7 @@
     <div class="container is-max-desktop has-text-centered">
 
       <h1 class="title is-1">
-        SkySplat-OV: Generalizable Language Gaussian Splatting for Open-Vocabulary Scene Understanding from Sparse Satellite Views
+        SkySplat++: Hierarchical 3D Gaussian Splatting for Generalizable Sparse-View Reconstruction from Multi-Temporal Satellite Imagery
       </h1>
 
       <div class="publication-links">
@@ -126,17 +126,17 @@
       <!-- 图片 -->
       <figure class="image" style="margin-bottom: 14px;">
         <img src="static/images/fig1_top.png"
-             alt="SkySplat-OV Teaser"
+             alt="SkySplatV2 Teaser"
              style="width:100%; border-radius:12px;">
       </figure>
 
       <!-- 文字说明 -->
       <div class="content has-text-justified">
         <p>
-          Comparison with existing methods. 
-          (a) Generalization results on the DFC19 dataset. SkySplat-OV achieves the best performance among all competing methods. 
-          (b) Per-scene optimization results. SkySplat-OV reaches optimal performance within only 9.82 seconds.
-          (c) DSM reconstruction and semantic segmentation results on a representative area of interest (OMA315). We report the MAE, mIoU, and reconstruction time of SkySplat-OV and Uni3R.
+          Comparison with existing methods.
+          (a) Generalization results on the DFC19 dataset. SkySplat++ achieves the best performance among all competitors. 
+          (b) Per-scene optimization results. SkySplat++ reaches optimal performance in just 7.53 seconds. 
+          (c) DSM reconstruction results on two areas of interest (AOIs). We report both MAE and reconstruction time.
         </p>
       </div>
     </div>
@@ -151,30 +151,33 @@
 
     <div class="content has-text-justified">
       <p>
-        Abstract. Open-vocabulary scene understanding aims to recognize arbitrary semantic concepts in 3D beyond a fixed set of categories. 
-        Recent methods built upon 3D Gaussian Splatting (3DGS) enable scene understanding by distilling features from vision–language models, but most rely on per-scene optimization and dense observations, which limit scalability.
-        More recent generalizable 3DGS methods show promise, but they perform poorly on sparse-view satellite imagery due to the pushbroom imaging mode of satellites, limited geometric constraints, and extreme scale variations.
-        To address these limitations, we propose SkySplat-OV, a feed-forward framework that integrates the rational polynomial coefficient (RPC) model into a generalizable language 3DGS pipeline. 
-        A Geometry–Radiance–Semantics Fusion module, together with monocular relative height supervision and multi-view feature distillation, enables accurate Gaussian prediction and view-consistent segmentation results.
-        Compared to per-scene optimization methods, SkySplat-OV achieves up to $1070\times$ speedup over LangSplatV2 with higher accuracy. It also outperforms generalizable 3DGS baselines on two benchmarks, 
-        and demonstrates strong cross-dataset generalization on MVS3D.
+        Abstract. Scene reconstruction from sparse-view satellite images remains a challenging task due to insufficient geometric constraints. 
+        While generalizable 3D Gaussian Splatting (3DGS) methods have shown high efficiency for novel-view synthesis, 
+        existing methods are often unsuitable for satellite imagery due to incompatibility with the rational polynomial coefficient (RPC) model and limited generalization capability. 
+        In this work, we present SkySplat++, a hierarchical generalizable 3DGS framework that extends our previous SkySplat to further improve scene reconstruction. 
+        SkySplat++ refines Gaussian representations in a coarse-to-fine manner, enabling robust modeling of large-scale scene structures and fine-grained texture details. 
+        A Height-Guided Hierarchical Cost Volume Construction (HG-HCV) module is integrated to progressively narrow the height search range, 
+        facilitating more accurate cost volume construction, and a hybrid height supervision combining relative and absolute signals to improve geometric accuracy. 
+        Compared to per-scene optimization methods, SkySplat++ achieves up to 1070 times speed up over EOGS with higher accuracy. 
+        It also outperforms generalizable 3DGS baselines, achieving a 5–10 m reduction in MAE on two benchmarks and demonstrating strong cross-dataset generalization on the MVS3D test set.
       </p>
     </div>
 
     <div class="has-text-centered">
       <img src="static/images/fig2_pipeline.png"
-           alt="Overview of the SkySplat-OV framework"
+           alt="Overview of the SkySplat++ framework"
            style="width:100%; border-radius:12px;">
     </div>
 
     <!-- ===== Pipeline Description (placed directly under the figure) ===== -->
     <div class="content has-text-justified" style="margin-top: 14px;">
       <p>
-      SkySplat-OV first extracts deep features from sparse views and constructs a cost volume via RPC warping for regularization and height regression, achieving geometry reconstruction (Sec. 3.1). 
-        It then employs a GRS-Fusion module to accurately predict Gaussian parameters (Sec. 3.2).
-        Additionally, monocular relative height and language feature extracted from pre-trained 2D vision foundation models (VFMs) are incorporated as auxiliary supervision, 
-        combined with radiance supervision for self-supervised learning (Sec. 3.3). 
-        Finally, the distilled language features are fed into the FPN structure and decoder of SAM3 to obtain open-vocabulary segmentation results (Sec. 3.4).
+      We propose SkySplat++, a self-supervised and generalizable framework that avoids per-scene optimization. 
+      First, multi-view features are extracted from the sparse input images (Sec. 3.1), 
+      which are then used to construct hierarchical cost volumes through RPC warping, providing robust geometric cues under sparse-view conditions (Sec. 3.2).
+      These cues are subsequently leveraged to estimate hierarchical Gaussian parameters, yielding an expressive 3D representation (Sec. 3.3).
+      Finally, a multi-view consistency aggregation strategy is applied to refine the reconstructed scene (Sec. 3.4).
+      During training, multi-view photometric self-supervision and a hybrid height supervision are jointly employed to stabilize height estimation under radiometric inconsistencies. (Sec. 3.5).
       </p>
     </div>
 
