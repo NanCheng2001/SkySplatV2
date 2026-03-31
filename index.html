@@ -186,26 +186,15 @@ body { background: #f8f8f8; }
           document.getElementById(aoiId+"_top").style.clipPath = `inset(0 ${Math.min(Math.max(100-val3,0),100)}% 0 0)`;
       }
 
-      function initThreeSliders(aoiId){
-          ["slider1","slider2","slider3"].forEach(sliderSuffix=>{
-              const slider = document.getElementById(aoiId+"_"+sliderSuffix);
-              if(slider){
-                  slider.addEventListener("input",()=>updateImagesThreeSliders(aoiId));
-              }
-          });
-          // 延迟初始化，确保 DOM 元素存在
-          setTimeout(()=>updateImagesThreeSliders(aoiId),50);
-      }
-
       window.onload = function(){
           const container = document.getElementById("aoi-containers");
+
+          // 1. 生成所有 AOI HTML
           aois.forEach(aoi=>{
-              // 方法标签
               let labelsHTML = '<div class="method-labels">';
               aoi.methods.forEach(m=>labelsHTML+=`<span>${m}</span>`);
               labelsHTML += '</div>';
 
-              // 图片叠放
               let imagesHTML = `
               <div class="image-compare-container" id="${aoi.id}_container">
                   <img src="${aoi.paths[0]}" class="bottom">
@@ -214,7 +203,6 @@ body { background: #f8f8f8; }
                   <img src="${aoi.paths[3]}" class="top" id="${aoi.id}_top">
               </div>`;
 
-              // 三滑块
               let sliderHTML = `
               <div class="slider-container">
                   <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider1">
@@ -223,7 +211,17 @@ body { background: #f8f8f8; }
               </div>`;
 
               container.innerHTML += `<h3 class="title is-5 has-text-centered">AOI: ${aoi.name}</h3>${labelsHTML}${imagesHTML}${sliderHTML}`;
-              initThreeSliders(aoi.id);
+          });
+
+          // 2. 初始化滑块绑定事件
+          aois.forEach(aoi=>{
+              ["slider1","slider2","slider3"].forEach(sliderSuffix=>{
+                  const slider = document.getElementById(aoi.id+"_"+sliderSuffix);
+                  if(slider){
+                      slider.addEventListener("input",()=>updateImagesThreeSliders(aoi.id));
+                  }
+              });
+              updateImagesThreeSliders(aoi.id); // 初始化 clip-path
           });
       }
     </script>
