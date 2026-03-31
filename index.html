@@ -17,29 +17,36 @@
 <style>
 body { background: #f8f8f8; }
 
-/* ===== Image Compare ===== */
+/* ===== Image Compare Container ===== */
 .image-compare-container {
   position: relative;
   width: 100%;
   max-width: 900px;
-  margin: auto;
-  overflow: hidden;
+  margin: 20px auto;
   border-radius: 12px;
-  padding-top: 56.25%; /* 16:9 ratio */
+  overflow: hidden;
 }
 .image-compare-container img {
-  position: absolute;
-  top: 0; left: 0;
   width: 100%;
-  height: 100%;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
   object-fit: cover;
-  transition: clip-path 0.1s linear;
+}
+.method-labels {
+  display: flex;
+  justify-content: space-between;
+  max-width: 900px;
+  margin: 0 auto 5px auto;
+  font-weight: bold;
+  font-size: 0.9rem;
 }
 
 /* ===== Slider ===== */
 .slider-container {
   max-width: 900px;
-  margin: 10px auto 50px auto;
+  margin: 5px auto 30px auto;
   text-align: center;
 }
 .slider-container input[type="range"] {
@@ -64,7 +71,6 @@ body { background: #f8f8f8; }
 }
 </style>
 </head>
-
 <body>
 
 <!-- ================= Title & Links ================= -->
@@ -122,48 +128,70 @@ body { background: #f8f8f8; }
   </div>
 </section>
 
-<!-- ================= AOI Comparisons: Four Images + Single Slider ================= -->
+<!-- ================= AOI Comparisons ================= -->
 <section class="section is-light">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Comparison with Feed-forward Methods</h2>
 
-    <!-- ================= AOI: JAX072 ================= -->
-    <h3 class="title is-5 has-text-centered">AOI: JAX072</h3>
-    <div class="image-compare-container" id="jax072_container">
-      <img src="static/images/MVSplat_JAX_Tile_072-image.png" id="jax072_0">
-      <img src="static/images/HiSplat_JAX_Tile_072-image.png" id="jax072_1">
-      <img src="static/images/SkySplat_JAX_Tile_072-image.png" id="jax072_2">
-      <img src="static/images/SkySplatV2_JAX_Tile_072-image.png" id="jax072_3">
-    </div>
-    <div class="slider-container">
-      <input type="range" min="0" max="300" value="150" id="jax072_slider">
-      <p>Drag slider to compare four methods</p>
-    </div>
-
-    <!-- ================= AOI: JAX079 ================= -->
-    <h3 class="title is-5 has-text-centered">AOI: JAX079</h3>
-    <div class="image-compare-container" id="jax079_container">
-      <img src="static/images/MVSplat_JAX_Tile_079-image.png" id="jax079_0">
-      <img src="static/images/HiSplat_JAX_Tile_079-image.png" id="jax079_1">
-      <img src="static/images/SkySplat_JAX_Tile_079-image.png" id="jax079_2">
-      <img src="static/images/SkySplatV2_JAX_Tile_079-image.png" id="jax079_3">
-    </div>
-    <div class="slider-container">
-      <input type="range" min="0" max="300" value="150" id="jax079_slider">
-      <p>Drag slider to compare four methods</p>
+    <!-- ================= AOI Template ================= -->
+    <div class="aoi-block">
+      <h3 class="title is-5 has-text-centered">AOI: JAX072</h3>
+      <div class="method-labels">
+        <span>MVSplat</span>
+        <span>HiSplat</span>
+        <span>SkySplat</span>
+        <span>SkySplat++</span>
+      </div>
+      <div class="image-compare-container" id="jax072_container">
+        <img src="static/images/MVSplat_JAX_Tile_072-image.png" id="jax072_0">
+        <img src="static/images/HiSplat_JAX_Tile_072-image.png" id="jax072_1">
+        <img src="static/images/SkySplat_JAX_Tile_072-image.png" id="jax072_2">
+        <img src="static/images/SkySplatV2_JAX_Tile_072-image.png" id="jax072_3">
+      </div>
+      <div class="slider-container">
+        <input type="range" min="0" max="300" value="150" id="jax072_slider">
+        <p>Drag slider to compare four methods</p>
+      </div>
     </div>
 
-    <!-- ================= AOI: OMA212 ================= -->
-    <h3 class="title is-5 has-text-centered">AOI: OMA212</h3>
-    <div class="image-compare-container" id="oma212_container">
-      <img src="static/images/MVSplat_OMA_Tile_212-image.png" id="oma212_0">
-      <img src="static/images/HiSplat_OMA_Tile_212-image.png" id="oma212_1">
-      <img src="static/images/SkySplat_OMA_Tile_212-image.png" id="oma212_2">
-      <img src="static/images/SkySplatV2_OMA_Tile_212-image.png" id="oma212_3">
+    <div class="aoi-block">
+      <h3 class="title is-5 has-text-centered">AOI: JAX079</h3>
+      <div class="method-labels">
+        <span>MVSplat</span>
+        <span>HiSplat</span>
+        <span>SkySplat</span>
+        <span>SkySplat++</span>
+      </div>
+      <div class="image-compare-container" id="jax079_container">
+        <img src="static/images/MVSplat_JAX_Tile_079-image.png" id="jax079_0">
+        <img src="static/images/HiSplat_JAX_Tile_079-image.png" id="jax079_1">
+        <img src="static/images/SkySplat_JAX_Tile_079-image.png" id="jax079_2">
+        <img src="static/images/SkySplatV2_JAX_Tile_079-image.png" id="jax079_3">
+      </div>
+      <div class="slider-container">
+        <input type="range" min="0" max="300" value="150" id="jax079_slider">
+        <p>Drag slider to compare four methods</p>
+      </div>
     </div>
-    <div class="slider-container">
-      <input type="range" min="0" max="300" value="150" id="oma212_slider">
-      <p>Drag slider to compare four methods</p>
+
+    <div class="aoi-block">
+      <h3 class="title is-5 has-text-centered">AOI: OMA212</h3>
+      <div class="method-labels">
+        <span>MVSplat</span>
+        <span>HiSplat</span>
+        <span>SkySplat</span>
+        <span>SkySplat++</span>
+      </div>
+      <div class="image-compare-container" id="oma212_container">
+        <img src="static/images/MVSplat_OMA_Tile_212-image.png" id="oma212_0">
+        <img src="static/images/HiSplat_OMA_Tile_212-image.png" id="oma212_1">
+        <img src="static/images/SkySplat_OMA_Tile_212-image.png" id="oma212_2">
+        <img src="static/images/SkySplatV2_OMA_Tile_212-image.png" id="oma212_3">
+      </div>
+      <div class="slider-container">
+        <input type="range" min="0" max="300" value="150" id="oma212_slider">
+        <p>Drag slider to compare four methods</p>
+      </div>
     </div>
 
   </div>
@@ -196,43 +224,35 @@ body { background: #f8f8f8; }
 </footer>
 
 <script>
-// ===== 单滑块控制四图 =====
-function updateFourImagesSingleSlider(aoiId, sliderValue) {
+// ===== 四图滑块 =====
+function updateFourImages(aoiId, sliderValue){
   const imgs = [
     document.getElementById(aoiId+"_0"),
     document.getElementById(aoiId+"_1"),
     document.getElementById(aoiId+"_2"),
     document.getElementById(aoiId+"_3")
   ];
-
-  // sliderValue 从 0 ~ 300, 每100对应一张图完全显示
-  for (let i=0; i<4; i++){
+  for(let i=0;i<4;i++){
     const val = sliderValue - i*100;
-    if(val <= 0){
-      imgs[i].style.clipPath = "inset(0 100% 0 0)";
-    } else if(val >= 100){
-      imgs[i].style.clipPath = "inset(0 0 0 0)";
-    } else {
-      imgs[i].style.clipPath = `inset(0 ${100 - val}% 0 0)`;
-    }
+    if(val <= 0) imgs[i].style.width = "0%";
+    else if(val >= 100) imgs[i].style.width = "100%";
+    else imgs[i].style.width = val + "%";
   }
 }
 
-// ===== 初始化滑块 =====
 function initSlider(aoiId){
   const slider = document.getElementById(aoiId+"_slider");
-  slider.addEventListener('input', ()=>{
-    updateFourImagesSingleSlider(aoiId, Number(slider.value));
+  slider.addEventListener("input", ()=>{
+    updateFourImages(aoiId, Number(slider.value));
   });
-  updateFourImagesSingleSlider(aoiId, Number(slider.value));
+  updateFourImages(aoiId, Number(slider.value));
 }
 
-// ===== 页面加载 =====
 window.onload = function(){
   initSlider('jax072');
   initSlider('jax079');
   initSlider('oma212');
-}
+};
 </script>
 
 </body>
