@@ -33,15 +33,17 @@ body { background: #f8f8f8; }
   top: 0;
   left: 0;
   height: 100%;
+  width: 100%; /* 默认占满 */
   object-fit: cover;
-  transition: width 0.3s ease; /* 平滑过渡 */
+  clip-path: inset(0 0 0 0); /* 初始不裁剪 */
+  transition: clip-path 0.2s ease; /* 滑动平滑过渡 */
 }
 
 /* 叠放顺序 bottom -> middle1 -> middle2 -> top */
-.image-compare-container img.bottom { z-index: 1; width: 100%; }
-.image-compare-container img.middle1 { z-index: 2; width: 75%; }
-.image-compare-container img.middle2 { z-index: 3; width: 50%; }
-.image-compare-container img.top { z-index: 4; width: 25%; }
+.image-compare-container img.bottom { z-index: 1; }
+.image-compare-container img.middle1 { z-index: 2; }
+.image-compare-container img.middle2 { z-index: 3; }
+.image-compare-container img.top { z-index: 4; }
 
 /* 方法名称 */
 .method-labels {
@@ -191,12 +193,14 @@ body { background: #f8f8f8; }
       ];
 
       function updateFourImages(aoiId){
+        // clip-path 控制显示百分比
         const s1 = document.getElementById(aoiId+"_slider1").value;
         const s2 = document.getElementById(aoiId+"_slider2").value;
         const s3 = document.getElementById(aoiId+"_slider3").value;
-        document.getElementById(aoiId+"_middle1").style.width = s1 + "%";
-        document.getElementById(aoiId+"_middle2").style.width = s2 + "%";
-        document.getElementById(aoiId+"_top").style.width = s3 + "%";
+
+        document.getElementById(aoiId+"_middle1").style.clipPath = `inset(0 ${100-s1}% 0 0)`;
+        document.getElementById(aoiId+"_middle2").style.clipPath = `inset(0 ${100-s2}% 0 0)`;
+        document.getElementById(aoiId+"_top").style.clipPath = `inset(0 ${100-s3}% 0 0)`;
       }
 
       function initFourSlider(aoiId){
@@ -219,9 +223,9 @@ body { background: #f8f8f8; }
           let imagesHTML = `
           <div class="image-compare-container" id="${aoi.id}_container">
             <img src="${aoi.paths[0]}" class="bottom">
-            <img src="${aoi.paths[1]}" class="middle1" id="${aoi.id}_middle1" style="width:75%;">
-            <img src="${aoi.paths[2]}" class="middle2" id="${aoi.id}_middle2" style="width:50%;">
-            <img src="${aoi.paths[3]}" class="top" id="${aoi.id}_top" style="width:25%;">
+            <img src="${aoi.paths[1]}" class="middle1" id="${aoi.id}_middle1">
+            <img src="${aoi.paths[2]}" class="middle2" id="${aoi.id}_middle2">
+            <img src="${aoi.paths[3]}" class="top" id="${aoi.id}_top">
           </div>`;
 
           // 滑块
