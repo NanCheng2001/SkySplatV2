@@ -35,11 +35,10 @@ body { background: #f8f8f8; }
   height: 100%;
   width: 100%;
   object-fit: cover;
-  clip-path: inset(0 100% 0 0); /* 初始完全隐藏 */
-  transition: clip-path 0.2s ease; /* 滑动平滑过渡 */
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.2s ease;
 }
 
-/* 叠放顺序 bottom -> middle1 -> middle2 -> top */
 .image-compare-container img.bottom { z-index: 1; clip-path: inset(0 0 0 0); }
 .image-compare-container img.middle1 { z-index: 2; }
 .image-compare-container img.middle2 { z-index: 3; }
@@ -111,7 +110,7 @@ body { background: #f8f8f8; }
     <h2 class="title is-3 has-text-centered">Brief Introduction</h2>
     <div class="content has-text-justified">
       <p>
-        Abstract. Scene reconstruction from sparse-view satellite images remains challenging due to insufficient geometric constraints. 
+        Scene reconstruction from sparse-view satellite images remains challenging due to insufficient geometric constraints. 
         SkySplat++ extends our previous 3DGS method, refining Gaussian representations in a coarse-to-fine manner for robust large-scale structure and fine textures. 
         Height-guided hierarchical cost volumes and hybrid height supervision improve accuracy, achieving significant speedup and lower MAE compared to baselines.
       </p>
@@ -175,15 +174,13 @@ body { background: #f8f8f8; }
 
       function updateImagesSingleSlider(aoiId){
         const val = document.getElementById(aoiId+"_slider").value;
+        const percent = val; // 0~100
 
-        // 分段控制每张图的显示
-        const perc1 = Math.min(val*4, 100);       // middle1
-        const perc2 = Math.max(Math.min((val-25)*4, 100), 0); // middle2
-        const perc3 = Math.max(Math.min((val-50)*4, 100), 0); // top
-
-        document.getElementById(aoiId+"_middle1").style.clipPath = `inset(0 ${100-perc1}% 0 0)`;
-        document.getElementById(aoiId+"_middle2").style.clipPath = `inset(0 ${100-perc2}% 0 0)`;
-        document.getElementById(aoiId+"_top").style.clipPath = `inset(0 ${100-perc3}% 0 0)`;
+        // bottom 永远全显示
+        // middle1/middle2/top 依滑块线性叠加
+        document.getElementById(aoiId+"_middle1").style.clipPath = `inset(0 ${100-percent}% 0 0)`;
+        document.getElementById(aoiId+"_middle2").style.clipPath = `inset(0 ${100-percent}% 0 0)`;
+        document.getElementById(aoiId+"_top").style.clipPath = `inset(0 ${100-percent}% 0 0)`;
       }
 
       function initSingleSlider(aoiId){
@@ -195,12 +192,10 @@ body { background: #f8f8f8; }
       window.onload = function(){
         const container = document.getElementById("aoi-containers");
         aois.forEach(aoi=>{
-          // 方法标签
           let labelsHTML = '<div class="method-labels">';
           aoi.methods.forEach(m=>labelsHTML+=`<span>${m}</span>`);
           labelsHTML += '</div>';
 
-          // 图片叠放
           let imagesHTML = `
           <div class="image-compare-container" id="${aoi.id}_container">
             <img src="${aoi.paths[0]}" class="bottom">
@@ -209,7 +204,6 @@ body { background: #f8f8f8; }
             <img src="${aoi.paths[3]}" class="top" id="${aoi.id}_top">
           </div>`;
 
-          // 单滑块
           let sliderHTML = `
           <div class="slider-container">
             <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider">
