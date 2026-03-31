@@ -25,7 +25,7 @@ body { background: #f8f8f8; }
   margin: 20px auto;
   border-radius: 12px;
   overflow: hidden;
-  height: 400px; /* 设置固定高度保证图片显示 */
+  height: 400px; /* 固定高度 */
 }
 
 .image-compare-container img {
@@ -35,12 +35,12 @@ body { background: #f8f8f8; }
   object-fit: cover;
 }
 
-/* 只有上层图片使用 absolute 来实现滑块效果 */
-.image-compare-container img:last-child {
+/* 三图滑块遮罩 */
+.image-compare-container img.top {
   position: absolute;
   top: 0;
   left: 0;
-  width: 50%; /* 初始滑块位置 */
+  width: 50%; /* 初始滑块值 */
 }
 
 /* 方法名称 */
@@ -143,55 +143,28 @@ body { background: #f8f8f8; }
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Comparison with Feed-forward Methods</h2>
 
-    <!-- ================= AOI JAX072 ================= -->
-    <h3 class="title is-5 has-text-centered">AOI: JAX072</h3>
+    <!-- ================= AOI JAX072 三方法示例 ================= -->
+    <h3 class="title is-5 has-text-centered">AOI: JAX072 (Three Methods)</h3>
 
-    <!-- MVSplat vs HiSplat -->
     <div class="method-labels">
       <span>MVSplat</span>
       <span>HiSplat</span>
-    </div>
-    <div class="image-compare-container" id="jax072_1_container">
-      <img src="static/images/MVSplat_JAX_Tile_072-image.png" id="jax072_1_0">
-      <img src="static/images/HiSplat_JAX_Tile_072-image.png" id="jax072_1_1">
-    </div>
-    <div class="slider-container">
-      <input type="range" min="0" max="100" value="50" id="jax072_1_slider">
-      <p>Drag slider to compare MVSplat vs HiSplat</p>
-    </div>
-
-    <!-- SkySplat vs SkySplat++ -->
-    <div class="method-labels">
-      <span>SkySplat</span>
       <span>SkySplat++</span>
     </div>
-    <div class="image-compare-container" id="jax072_2_container">
-      <img src="static/images/SkySplat_JAX_Tile_072-image.png" id="jax072_2_0">
-      <img src="static/images/SkySplatV2_JAX_Tile_072-image.png" id="jax072_2_1">
+    <div class="image-compare-container" id="jax072_3_container">
+      <img src="static/images/MVSplat_JAX_Tile_072-image.png" class="bottom">
+      <img src="static/images/HiSplat_JAX_Tile_072-image.png" class="middle top" id="jax072_3_middle">
+      <img src="static/images/SkySplatV2_JAX_Tile_072-image.png" class="top top" id="jax072_3_top">
     </div>
     <div class="slider-container">
-      <input type="range" min="0" max="100" value="50" id="jax072_2_slider">
-      <p>Drag slider to compare SkySplat vs SkySplat++</p>
+      <input type="range" min="0" max="100" value="50" id="jax072_3_slider1">
+      <input type="range" min="0" max="100" value="50" id="jax072_3_slider2">
+      <p>Slider1: HiSplat vs MVSplat, Slider2: SkySplat++ vs HiSplat</p>
     </div>
 
-    <!-- ================= AOI JAX079 ================= -->
+    <!-- ================= AOI JAX079 双方法示例 ================= -->
     <h3 class="title is-5 has-text-centered">AOI: JAX079</h3>
 
-    <!-- MVSplat vs HiSplat -->
-    <div class="method-labels">
-      <span>MVSplat</span>
-      <span>HiSplat</span>
-    </div>
-    <div class="image-compare-container" id="jax079_1_container">
-      <img src="static/images/MVSplat_JAX_Tile_079-image.png" id="jax079_1_0">
-      <img src="static/images/HiSplat_JAX_Tile_079-image.png" id="jax079_1_1">
-    </div>
-    <div class="slider-container">
-      <input type="range" min="0" max="100" value="50" id="jax079_1_slider">
-      <p>Drag slider to compare MVSplat vs HiSplat</p>
-    </div>
-
-    <!-- SkySplat vs SkySplat++ -->
     <div class="method-labels">
       <span>SkySplat</span>
       <span>SkySplat++</span>
@@ -202,37 +175,6 @@ body { background: #f8f8f8; }
     </div>
     <div class="slider-container">
       <input type="range" min="0" max="100" value="50" id="jax079_2_slider">
-      <p>Drag slider to compare SkySplat vs SkySplat++</p>
-    </div>
-
-    <!-- ================= AOI OMA212 ================= -->
-    <h3 class="title is-5 has-text-centered">AOI: OMA212</h3>
-
-    <!-- MVSplat vs HiSplat -->
-    <div class="method-labels">
-      <span>MVSplat</span>
-      <span>HiSplat</span>
-    </div>
-    <div class="image-compare-container" id="oma212_1_container">
-      <img src="static/images/MVSplat_OMA_Tile_212-image.png" id="oma212_1_0">
-      <img src="static/images/HiSplat_OMA_Tile_212-image.png" id="oma212_1_1">
-    </div>
-    <div class="slider-container">
-      <input type="range" min="0" max="100" value="50" id="oma212_1_slider">
-      <p>Drag slider to compare MVSplat vs HiSplat</p>
-    </div>
-
-    <!-- SkySplat vs SkySplat++ -->
-    <div class="method-labels">
-      <span>SkySplat</span>
-      <span>SkySplat++</span>
-    </div>
-    <div class="image-compare-container" id="oma212_2_container">
-      <img src="static/images/SkySplat_OMA_Tile_212-image.png" id="oma212_2_0">
-      <img src="static/images/SkySplatV2_OMA_Tile_212-image.png" id="oma212_2_1">
-    </div>
-    <div class="slider-container">
-      <input type="range" min="0" max="100" value="50" id="oma212_2_slider">
       <p>Drag slider to compare SkySplat vs SkySplat++</p>
     </div>
 
@@ -266,7 +208,7 @@ body { background: #f8f8f8; }
 </footer>
 
 <script>
-// ===== 两图滑块 =====
+// ===== 双图滑块 =====
 function updateTwoImages(aoiId, sliderValue){
   const img2 = document.getElementById(aoiId+"_1");
   img2.style.width = sliderValue + "%";
@@ -278,14 +220,31 @@ function initSlider(aoiId){
   updateTwoImages(aoiId, Number(slider.value));
 }
 
+// ===== 三图滑块 =====
+function updateThreeImages(aoiId){
+  const slider1 = document.getElementById(aoiId+"_slider1");
+  const slider2 = document.getElementById(aoiId+"_slider2");
+  const middle = document.getElementById(aoiId+"_middle");
+  const top = document.getElementById(aoiId+"_top");
+
+  middle.style.width = slider1.value + "%";
+  top.style.width = slider2.value + "%";
+}
+
+function initThreeSlider(aoiId){
+  const s1 = document.getElementById(aoiId+"_slider1");
+  const s2 = document.getElementById(aoiId+"_slider2");
+  [s1, s2].forEach(slider => slider.addEventListener("input", ()=> updateThreeImages(aoiId)));
+  updateThreeImages(aoiId);
+}
+
 // 初始化所有滑块
 window.onload = function(){
-  const sliders = [
-    'jax072_1', 'jax072_2',
-    'jax079_1', 'jax079_2',
-    'oma212_1', 'oma212_2'
-  ];
-  sliders.forEach(id => initSlider(id));
+  const twoSliders = ['jax079_2'];
+  twoSliders.forEach(id => initSlider(id));
+
+  const threeSliders = ['jax072_3'];
+  threeSliders.forEach(id => initThreeSlider(id));
 };
 </script>
 
