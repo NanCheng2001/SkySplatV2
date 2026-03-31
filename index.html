@@ -34,13 +34,13 @@
     .image-compare-container img {
       width: 100%;
       display: block;
-    }
-    .img-front {
       position: absolute;
       top: 0;
       left: 0;
-      clip-path: inset(0 50% 0 0);
-      -webkit-clip-path: inset(0 50% 0 0); /* Safari */
+    }
+    /* 顺序：底层图不动，前景图用 clip-path */
+    .img-base {
+      position: relative;
     }
     .slider {
       width: 100%;
@@ -66,23 +66,45 @@
   </style>
   
   <script>
-  // 单图滑块（可选）
-  function slideCompare(val, imgId) {
-    const img = document.getElementById(imgId);
-    img.style.clipPath = `inset(0 ${100 - val}% 0 0)`;
-    img.style.webkitClipPath = `inset(0 ${100 - val}% 0 0)`;
+  // ===== 三滑块同时控制四张图 =====
+  function slideCompareFour(sliderValues, imgIds) {
+    // sliderValues: [v1, v2, v3] 0~100
+    // imgIds: [bottom, mid1, mid2, top]
+    const percent = sliderValues.map(v => Number(v));
+    const [v1, v2, v3] = percent;
+
+    const imgBase = document.getElementById(imgIds[0]);
+    const imgMid1 = document.getElementById(imgIds[1]);
+    const imgMid2 = document.getElementById(imgIds[2]);
+    const imgTop  = document.getElementById(imgIds[3]);
+
+    if(imgBase) imgBase.style.clipPath = `inset(0 0 0 0)`;
+    if(imgMid1) imgMid1.style.clipPath = `inset(0 ${100 - v1}% 0 0)`;
+    if(imgMid2) imgMid2.style.clipPath = `inset(0 ${100 - v2}% 0 0)`;
+    if(imgTop)  imgTop.style.clipPath  = `inset(0 ${100 - v3}% 0 0)`;
   }
 
-  // 多图滑块
-  function slideCompareMulti(val, imgIds) {
-    const percent = 100 - Number(val);
-    imgIds.forEach(id => {
-      const img = document.getElementById(id);
-      if (img) {
-        img.style.clipPath = `inset(0 ${percent}% 0 0)`;
-        img.style.webkitClipPath = `inset(0 ${percent}% 0 0)`; // Safari兼容
-      }
-    });
+  function initFourSlider(aoiId, imgIds) {
+    const slider1 = document.getElementById(`${aoiId}_slider1`);
+    const slider2 = document.getElementById(`${aoiId}_slider2`);
+    const slider3 = document.getElementById(`${aoiId}_slider3`);
+
+    function update() {
+      slideCompareFour([slider1.value, slider2.value, slider3.value], imgIds);
+    }
+    slider1.oninput = update;
+    slider2.oninput = update;
+    slider3.oninput = update;
+
+    // 初始化位置
+    update();
+  }
+
+  window.onload = function() {
+    // 初始化每个 AOI 的滑块
+    initFourSlider('jax072', ['jax072_mvsplat','jax072_hisplat','jax072_skysplat','jax072_skysplatv2']);
+    initFourSlider('jax079', ['jax079_mvsplat','jax079_hisplat','jax079_skysplat','jax079_skysplatv2']);
+    initFourSlider('oma212', ['oma212_mvsplat','oma212_hisplat','oma212_skysplat','oma212_skysplatv2']);
   }
   </script>
 </head>
@@ -93,7 +115,6 @@
 <section class="hero">
   <div class="hero-body">
     <div class="container is-max-desktop has-text-centered">
-
       <h1 class="title is-1">
         SkySplat++: Hierarchical 3D Gaussian Splatting for Generalizable Sparse-View Reconstruction from Multi-Temporal Satellite Imagery
       </h1>
@@ -121,7 +142,6 @@
              alt="SkySplatV2 Teaser"
              style="width:100%; border-radius:12px;">
       </figure>
-
       <div class="content has-text-justified">
         <p>
           Comparison with existing methods.
@@ -176,9 +196,7 @@
 <!-- ================= Comparison with Feed-forward Methods ================= -->
 <section class="section is-light">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">
-      Comparison with Feed-forward Methods
-    </h2>
+    <h2 class="title is-3 has-text-centered">Comparison with Feed-forward Methods</h2>
 
     <!-- ================= AOI: JAX072 ================= -->
     <h3 class="title is-5 has-text-centered">AOI: JAX072</h3>
@@ -188,18 +206,14 @@
           MVSplat | HiSplat | SkySplat | SkySplatV2 (Ours)
         </p>
         <div class="image-compare-container">
-          <img src="static/images/MVSplat_JAX_Tile_072-image.png">
-          <img src="static/images/HiSplat_JAX_Tile_072-image.png"
-               class="img-front" id="jax072_hisplat">
-          <img src="static/images/SkySplat_JAX_Tile_072-image.png"
-               class="img-front" id="jax072_skysplat">
-          <img src="static/images/SkySplatV2_JAX_Tile_072-image.png"
-               class="img-front" id="jax072_skysplatv2">
+          <img src="static/images/MVSplat_JAX_Tile_072-image.png" id="jax072_mvsplat" class="img-base">
+          <img src="static/images/HiSplat_JAX_Tile_072-image.png" id="jax072_hisplat">
+          <img src="static/images/SkySplat_JAX_Tile_072-image.png" id="jax072_skysplat">
+          <img src="static/images/SkySplatV2_JAX_Tile_072-image.png" id="jax072_skysplatv2">
         </div>
-        <input type="range" min="0" max="100" value="50"
-               class="slider"
-               oninput="slideCompareMulti(this.value,
-               ['jax072_hisplat','jax072_skysplat','jax072_skysplatv2'])">
+        <input type="range" min="0" max="100" value="50" class="slider" id="jax072_slider1">
+        <input type="range" min="0" max="100" value="50" class="slider" id="jax072_slider2">
+        <input type="range" min="0" max="100" value="50" class="slider" id="jax072_slider3">
       </div>
     </div>
 
@@ -211,18 +225,14 @@
           MVSplat | HiSplat | SkySplat | SkySplatV2 (Ours)
         </p>
         <div class="image-compare-container">
-          <img src="static/images/MVSplat_JAX_Tile_079-image.png">
-          <img src="static/images/HiSplat_JAX_Tile_079-image.png"
-               class="img-front" id="jax079_hisplat">
-          <img src="static/images/SkySplat_JAX_Tile_079-image.png"
-               class="img-front" id="jax079_skysplat">
-          <img src="static/images/SkySplatV2_JAX_Tile_079-image.png"
-               class="img-front" id="jax079_skysplatv2">
+          <img src="static/images/MVSplat_JAX_Tile_079-image.png" id="jax079_mvsplat" class="img-base">
+          <img src="static/images/HiSplat_JAX_Tile_079-image.png" id="jax079_hisplat">
+          <img src="static/images/SkySplat_JAX_Tile_079-image.png" id="jax079_skysplat">
+          <img src="static/images/SkySplatV2_JAX_Tile_079-image.png" id="jax079_skysplatv2">
         </div>
-        <input type="range" min="0" max="100" value="50"
-               class="slider"
-               oninput="slideCompareMulti(this.value,
-               ['jax079_hisplat','jax079_skysplat','jax079_skysplatv2'])">
+        <input type="range" min="0" max="100" value="50" class="slider" id="jax079_slider1">
+        <input type="range" min="0" max="100" value="50" class="slider" id="jax079_slider2">
+        <input type="range" min="0" max="100" value="50" class="slider" id="jax079_slider3">
       </div>
     </div>
 
@@ -234,18 +244,14 @@
           MVSplat | HiSplat | SkySplat | SkySplatV2 (Ours)
         </p>
         <div class="image-compare-container">
-          <img src="static/images/MVSplat_OMA_Tile_212-image.png">
-          <img src="static/images/HiSplat_OMA_Tile_212-image.png"
-               class="img-front" id="oma212_hisplat">
-          <img src="static/images/SkySplat_OMA_Tile_212-image.png"
-               class="img-front" id="oma212_skysplat">
-          <img src="static/images/SkySplatV2_OMA_Tile_212-image.png"
-               class="img-front" id="oma212_skysplatv2">
+          <img src="static/images/MVSplat_OMA_Tile_212-image.png" id="oma212_mvsplat" class="img-base">
+          <img src="static/images/HiSplat_OMA_Tile_212-image.png" id="oma212_hisplat">
+          <img src="static/images/SkySplat_OMA_Tile_212-image.png" id="oma212_skysplat">
+          <img src="static/images/SkySplatV2_OMA_Tile_212-image.png" id="oma212_skysplatv2">
         </div>
-        <input type="range" min="0" max="100" value="50"
-               class="slider"
-               oninput="slideCompareMulti(this.value,
-               ['oma212_hisplat','oma212_skysplat','oma212_skysplatv2'])">
+        <input type="range" min="0" max="100" value="50" class="slider" id="oma212_slider1">
+        <input type="range" min="0" max="100" value="50" class="slider" id="oma212_slider2">
+        <input type="range" min="0" max="100" value="50" class="slider" id="oma212_slider3">
       </div>
     </div>
   </div>
