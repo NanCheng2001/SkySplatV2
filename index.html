@@ -1,119 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkySplat++: Hierarchical 3D Gaussian Splatting</title>
 
-  <title>SkySplat++: Hierarchical 3D Gaussian Splatting for Generalizable Sparse-View Reconstruction from Multi-Temporal Satellite Imagery</title>
+<!-- Styles -->
+<link rel="stylesheet" href="static/css/bulma.min.css">
+<link rel="stylesheet" href="static/css/index.css">
 
-  <!-- Anonymous & ECCV-safe meta -->
-  <meta name="robots" content="noindex, nofollow">
-  <!-- <meta name="description"
-        content="SkySplat-OV enables open-vocabulary 3D scene understanding from sparse-view satellite images via language-guided Gaussian splatting."> -->
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/index.css">
-
-  <!-- Icons -->
-  <!-- <link rel="stylesheet" href="static/css/fontawesome.all.min.css"> -->
-  <link rel="stylesheet"
+<!-- Icons -->
+<link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 
-  <!-- JS -->
-  <script defer src="static/js/index.js"></script>
+<style>
+body { background: #f8f8f8; }
 
-  <style>
-    .image-compare-container {
-      position: relative;
-      width: 100%;
-      max-width: 900px;
-      margin: auto;
-      overflow: hidden;
-      border-radius: 12px;
-    }
-    .image-compare-container img {
-      width: 100%;
-      display: block;
-    }
-    .img-front {
-      position: absolute;
-      top: 0;
-      left: 0;
-      clip-path: inset(0 50% 0 0);
-    }
-    .slider {
-      width: 100%;
-      margin-top: 12px;
-    }
-  /* ===== GitHub button: pure black + clickable feeling ===== */
-  .publication-links .button.is-dark {
-    background-color: #000000 !important;
-    border-color: #000000 !important;
-    color: #ffffff !important;
-    opacity: 1 !important;
-    cursor: pointer;
-    transition: background-color 0.15s ease, transform 0.1s ease;
-  }
-  
-  .publication-links .button.is-dark:hover {
-    background-color: #111111 !important;
-    border-color: #111111 !important;
-  }
-  
-  .publication-links .button.is-dark:active {
-    transform: translateY(1px);
-  }
+/* ===== Image Compare Container ===== */
+.image-compare-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 400px; /* 固定高度 */
+}
 
-  </style>
-  
-  <script>
-  function slideCompare(val, imgId) {
-    const img = document.getElementById(imgId);
-    img.style.clipPath = `inset(0 ${100 - val}% 0 0)`;
-  }
-</script>
+.image-compare-container img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* 三图滑块遮罩 */
+.image-compare-container img.top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%; /* 初始滑块值 */
+}
+
+/* 方法名称 */
+.method-labels {
+  display: flex;
+  justify-content: space-between;
+  max-width: 900px;
+  margin: 0 auto 5px auto;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* Slider */
+.slider-container {
+  max-width: 900px;
+  margin: 5px auto 30px auto;
+  text-align: center;
+}
+.slider-container input[type="range"] {
+  width: 80%;
+}
+
+/* GitHub button styling */
+.publication-links .button.is-dark {
+  background-color: #000 !important;
+  border-color: #000 !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+.publication-links .button.is-dark:hover {
+  background-color: #111 !important;
+  border-color: #111 !important;
+}
+.publication-links .button.is-dark:active {
+  transform: translateY(1px);
+}
+</style>
 </head>
-
 <body>
 
 <!-- ================= Title & Links ================= -->
 <section class="hero">
   <div class="hero-body">
     <div class="container is-max-desktop has-text-centered">
-
       <h1 class="title is-1">
-        SkySplat++: Hierarchical 3D Gaussian Splatting for Generalizable Sparse-View Reconstruction from Multi-Temporal Satellite Imagery
+        SkySplat++: Hierarchical 3D Gaussian Splatting for Generalizable Sparse-View Reconstruction
       </h1>
-
       <div class="publication-links">
-
-        <!-- <span class="link-block">
-          <a href="static/pdfs/paper.pdf" target="_blank"
-             class="button is-normal is-rounded is-dark">
-            <span class="icon"><i class="fas fa-file-pdf"></i></span>
-            <span>Paper</span>
-          </a>
-        </span>
-
         <span class="link-block">
-          <a href="https://arxiv.org/abs/XXXX.XXXXX" target="_blank"
-             class="button is-normal is-rounded is-dark">
-            <span class="icon"><i class="ai ai-arxiv"></i></span>
-            <span>arXiv</span>
-          </a>
-        </span> -->
-
-        <span class="link-block">
-            <a class="button is-normal is-rounded is-dark"
-               href="javascript:void(0);"
-               aria-disabled="true">
-            <span class="icon"><i class="fab fa-github"></i></span>
-            <span>Code (Coming Soon)</span>
-          </a>
+            <a class="button is-normal is-rounded is-dark" href="javascript:void(0);" aria-disabled="true">
+              <span class="icon"><i class="fab fa-github"></i></span>
+              <span>Code (Coming Soon)</span>
+            </a>
         </span>
-
       </div>
     </div>
   </div>
@@ -123,14 +106,9 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <!-- 图片 -->
       <figure class="image" style="margin-bottom: 14px;">
-        <img src="static/images/fig1_top.png"
-             alt="SkySplatV2 Teaser"
-             style="width:100%; border-radius:12px;">
+        <img src="static/images/fig1_top.png" alt="SkySplatV2 Teaser" style="width:100%; border-radius:12px;">
       </figure>
-
-      <!-- 文字说明 -->
       <div class="content has-text-justified">
         <p>
           Comparison with existing methods.
@@ -143,195 +121,133 @@
   </div>
 </section>
 
-
 <!-- ================= Brief Introduction ================= -->
 <section class="section is-light">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Brief Introduction</h2>
-
     <div class="content has-text-justified">
       <p>
-        Abstract. Scene reconstruction from sparse-view satellite images remains a challenging task due to insufficient geometric constraints. 
-        While generalizable 3D Gaussian Splatting (3DGS) methods have shown high efficiency for novel-view synthesis, 
-        existing methods are often unsuitable for satellite imagery due to incompatibility with the rational polynomial coefficient (RPC) model and limited generalization capability. 
-        In this work, we present SkySplat++, a hierarchical generalizable 3DGS framework that extends our previous SkySplat to further improve scene reconstruction. 
-        SkySplat++ refines Gaussian representations in a coarse-to-fine manner, enabling robust modeling of large-scale scene structures and fine-grained texture details. 
-        A Height-Guided Hierarchical Cost Volume Construction (HG-HCV) module is integrated to progressively narrow the height search range, 
-        facilitating more accurate cost volume construction, and a hybrid height supervision combining relative and absolute signals to improve geometric accuracy. 
-        Compared to per-scene optimization methods, SkySplat++ achieves up to 1070 times speed up over EOGS with higher accuracy. 
-        It also outperforms generalizable 3DGS baselines, achieving a 5–10 m reduction in MAE on two benchmarks and demonstrating strong cross-dataset generalization on the MVS3D test set.
+        Abstract. Scene reconstruction from sparse-view satellite images remains challenging due to insufficient geometric constraints. 
+        SkySplat++ extends our previous 3DGS method, refining Gaussian representations in a coarse-to-fine manner for robust large-scale structure and fine textures. 
+        Height-guided hierarchical cost volumes and hybrid height supervision improve accuracy, achieving significant speedup and lower MAE compared to baselines.
       </p>
     </div>
-
     <div class="has-text-centered">
-      <img src="static/images/fig2_pipeline.png"
-           alt="Overview of the SkySplat++ framework"
-           style="width:100%; border-radius:12px;">
+      <img src="static/images/fig2_pipeline.png" alt="Overview of the SkySplat++ framework" style="width:100%; border-radius:12px;">
     </div>
-
-    <!-- ===== Pipeline Description (placed directly under the figure) ===== -->
-    <div class="content has-text-justified" style="margin-top: 14px;">
-      <p>
-      We propose SkySplat++, a self-supervised and generalizable framework that avoids per-scene optimization. 
-      First, multi-view features are extracted from the sparse input images (Sec. 3.1), 
-      which are then used to construct hierarchical cost volumes through RPC warping, providing robust geometric cues under sparse-view conditions (Sec. 3.2).
-      These cues are subsequently leveraged to estimate hierarchical Gaussian parameters, yielding an expressive 3D representation (Sec. 3.3).
-      Finally, a multi-view consistency aggregation strategy is applied to refine the reconstructed scene (Sec. 3.4).
-      During training, multi-view photometric self-supervision and a hybrid height supervision are jointly employed to stabilize height estimation under radiometric inconsistencies. (Sec. 3.5).
-      </p>
-    </div>
-
   </div>
 </section>
 
-
-  
-<!-- ================= Comparison with Feed-forward Methods ================= -->
+<!-- ================= AOI Comparisons ================= -->
 <section class="section is-light">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">
-      Comparison with Feed-forward Methods
-    </h2>
+    <h2 class="title is-3 has-text-centered">Comparison with Feed-forward Methods</h2>
 
-    <!-- ================= AOI: JAX072 ================= -->
-    <h3 class="title is-5 has-text-centered">AOI: JAX072</h3>
+    <!-- ================= AOI JAX072 三方法示例 ================= -->
+    <h3 class="title is-5 has-text-centered">AOI: JAX072 (Three Methods)</h3>
 
-    <div class="columns is-gapless is-variable is-2">
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">
-          MVSplat | HiSplat | SkySplat | SkySplatV2 (Ours)
-        </p>
-
-        <div class="image-compare-container">
-          <!-- base -->
-          <img src="static/images/MVSplat_JAX_Tile_072-image.png">
-
-          <!-- overlays -->
-          <img src="static/images/HiSplat_JAX_Tile_072-image.png"
-               class="img-front"
-               id="jax072_hisplat">
-          <img src="static/images/SkySplat_JAX_Tile_072-image.png"
-               class="img-front"
-               id="jax072_skysplat">
-          <img src="static/images/SkySplatV2_JAX_Tile_072-image.png"
-               class="img-front"
-               id="jax072_skysplatv2">
-        </div>
-
-        <input type="range" min="0" max="100" value="50"
-               class="slider"
-               oninput="slideCompareMulti(this.value,
-               ['jax072_hisplat','jax072_skysplat','jax072_skysplatv2'])">
-      </div>
+    <div class="method-labels">
+      <span>MVSplat</span>
+      <span>HiSplat</span>
+      <span>SkySplat++</span>
+    </div>
+    <div class="image-compare-container" id="jax072_3_container">
+      <img src="static/images/MVSplat_JAX_Tile_072-image.png" class="bottom">
+      <img src="static/images/HiSplat_JAX_Tile_072-image.png" class="middle top" id="jax072_3_middle">
+      <img src="static/images/SkySplatV2_JAX_Tile_072-image.png" class="top top" id="jax072_3_top">
+    </div>
+    <div class="slider-container">
+      <input type="range" min="0" max="100" value="50" id="jax072_3_slider1">
+      <input type="range" min="0" max="100" value="50" id="jax072_3_slider2">
+      <p>Slider1: HiSplat vs MVSplat, Slider2: SkySplat++ vs HiSplat</p>
     </div>
 
-    <br>
-
-    <!-- ================= AOI: JAX079 ================= -->
+    <!-- ================= AOI JAX079 双方法示例 ================= -->
     <h3 class="title is-5 has-text-centered">AOI: JAX079</h3>
 
-    <div class="columns is-gapless is-variable is-2">
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">
-          MVSplat | HiSplat | SkySplat | SkySplatV2 (Ours)
-        </p>
-
-        <div class="image-compare-container">
-          <img src="static/images/MVSplat_JAX_Tile_079-image.png">
-
-          <img src="static/images/HiSplat_JAX_Tile_079-image.png"
-               class="img-front"
-               id="jax079_hisplat">
-          <img src="static/images/SkySplat_JAX_Tile_079-image.png"
-               class="img-front"
-               id="jax079_skysplat">
-          <img src="static/images/SkySplatV2_JAX_Tile_079-image.png"
-               class="img-front"
-               id="jax079_skysplatv2">
-        </div>
-
-        <input type="range" min="0" max="100" value="50"
-               class="slider"
-               oninput="slideCompareMulti(this.value,
-               ['jax079_hisplat','jax079_skysplat','jax079_skysplatv2'])">
-      </div>
+    <div class="method-labels">
+      <span>SkySplat</span>
+      <span>SkySplat++</span>
     </div>
-
-    <br>
-
-    <!-- ================= AOI: OMA212 ================= -->
-    <h3 class="title is-5 has-text-centered">AOI: OMA212</h3>
-
-    <div class="columns is-gapless is-variable is-2">
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">
-          MVSplat | HiSplat | SkySplat | SkySplatV2 (Ours)
-        </p>
-
-        <div class="image-compare-container">
-          <img src="static/images/MVSplat_OMA_Tile_212-image.png">
-
-          <img src="static/images/HiSplat_OMA_Tile_212-image.png"
-               class="img-front"
-               id="oma212_hisplat">
-          <img src="static/images/SkySplat_OMA_Tile_212-image.png"
-               class="img-front"
-               id="oma212_skysplat">
-          <img src="static/images/SkySplatV2_OMA_Tile_212-image.png"
-               class="img-front"
-               id="oma212_skysplatv2">
-        </div>
-
-        <input type="range" min="0" max="100" value="50"
-               class="slider"
-               oninput="slideCompareMulti(this.value,
-               ['oma212_hisplat','oma212_skysplat','oma212_skysplatv2'])">
-      </div>
+    <div class="image-compare-container" id="jax079_2_container">
+      <img src="static/images/SkySplat_JAX_Tile_079-image.png" id="jax079_2_0">
+      <img src="static/images/SkySplatV2_JAX_Tile_079-image.png" id="jax079_2_1">
+    </div>
+    <div class="slider-container">
+      <input type="range" min="0" max="100" value="50" id="jax079_2_slider">
+      <p>Drag slider to compare SkySplat vs SkySplat++</p>
     </div>
 
   </div>
 </section>
-
 
 <!-- ================= Results ================= -->
 <section class="section is-light">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Results</h2>
-
     <div class="has-text-centered">
-      <img src="static/images/fig6_8_AoIs.png"
-           alt="Experimental Results"
-           style="width:100%; border-radius:12px;">
+      <img src="static/images/fig6_8_AoIs.png" alt="Experimental Results" style="width:100%; border-radius:12px;">
     </div>
   </div>
 </section>
 
-  
 <!-- ================= Footer ================= -->
-
-  <footer class="footer">
+<footer class="footer">
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-8">
         <div class="content">
-
           <p>
-            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
-            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> adopted from <a href="https://nerfies.github.io" target="_blank">Nerfies</a>.
+            You are free to borrow the source code, please link back to this page in the footer. Licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
           </p>
-
         </div>
       </div>
     </div>
   </div>
 </footer>
 
-<!-- Statcounter tracking code -->
-  
-<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+<script>
+// ===== 双图滑块 =====
+function updateTwoImages(aoiId, sliderValue){
+  const img2 = document.getElementById(aoiId+"_1");
+  img2.style.width = sliderValue + "%";
+}
 
-    <!-- End of Statcounter Code -->
+function initSlider(aoiId){
+  const slider = document.getElementById(aoiId+"_slider");
+  slider.addEventListener("input", ()=> updateTwoImages(aoiId, Number(slider.value)));
+  updateTwoImages(aoiId, Number(slider.value));
+}
+
+// ===== 三图滑块 =====
+function updateThreeImages(aoiId){
+  const slider1 = document.getElementById(aoiId+"_slider1");
+  const slider2 = document.getElementById(aoiId+"_slider2");
+  const middle = document.getElementById(aoiId+"_middle");
+  const top = document.getElementById(aoiId+"_top");
+
+  middle.style.width = slider1.value + "%";
+  top.style.width = slider2.value + "%";
+}
+
+function initThreeSlider(aoiId){
+  const s1 = document.getElementById(aoiId+"_slider1");
+  const s2 = document.getElementById(aoiId+"_slider2");
+  [s1, s2].forEach(slider => slider.addEventListener("input", ()=> updateThreeImages(aoiId)));
+  updateThreeImages(aoiId);
+}
+
+// 初始化所有滑块
+window.onload = function(){
+  const twoSliders = ['jax079_2'];
+  twoSliders.forEach(id => initSlider(id));
+
+  const threeSliders = ['jax072_3'];
+  threeSliders.forEach(id => initThreeSlider(id));
+};
+</script>
 
 </body>
 </html>
+你这个滑块也太傻比了，不能把三个方法的图叠在一起，下面搞两个滑块，那样拖动吗。。输出修改后的全部代码，包括introduction这种
