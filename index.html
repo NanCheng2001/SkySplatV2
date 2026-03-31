@@ -177,19 +177,25 @@ body { background: #f8f8f8; }
         const val = document.getElementById(aoiId+"_slider").value;
 
         // 分段控制每张图的显示
-        const perc1 = Math.min(val*4, 100);       // middle1
-        const perc2 = Math.max(Math.min((val-25)*4, 100), 0); // middle2
-        const perc3 = Math.max(Math.min((val-50)*4, 100), 0); // top
+        const perc1 = Math.min(val*4, 100);                 // middle1 显示比例
+        const perc2 = Math.max(Math.min((val-25)*4, 100), 0); // middle2 显示比例
+        const perc3 = Math.max(Math.min((val-50)*4, 100), 0); // top 显示比例
 
-        document.getElementById(aoiId+"_middle1").style.clipPath = `inset(0 ${100-perc1}% 0 0)`;
-        document.getElementById(aoiId+"_middle2").style.clipPath = `inset(0 ${100-perc2}% 0 0)`;
-        document.getElementById(aoiId+"_top").style.clipPath = `inset(0 ${100-perc3}% 0 0)`;
+        const middle1 = document.getElementById(aoiId+"_middle1");
+        const middle2 = document.getElementById(aoiId+"_middle2");
+        const top     = document.getElementById(aoiId+"_top");
+
+        if(middle1) middle1.style.clipPath = `inset(0 ${100-perc1}% 0 0)`;
+        if(middle2) middle2.style.clipPath = `inset(0 ${100-perc2}% 0 0)`;
+        if(top)     top.style.clipPath     = `inset(0 ${100-perc3}% 0 0)`;
       }
 
       function initSingleSlider(aoiId){
         const slider = document.getElementById(aoiId+"_slider");
-        slider.addEventListener("input",()=>updateImagesSingleSlider(aoiId));
-        updateImagesSingleSlider(aoiId);
+        if(slider){
+          slider.addEventListener("input",()=>updateImagesSingleSlider(aoiId));
+          updateImagesSingleSlider(aoiId);
+        }
       }
 
       window.onload = function(){
