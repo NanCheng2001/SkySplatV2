@@ -36,7 +36,7 @@ body { background: #f8f8f8; }
   width: 100%;
   object-fit: cover;
   clip-path: inset(0 100% 0 0); /* 初始完全隐藏 */
-  transition: clip-path 0.2s ease;
+  transition: clip-path 0.2s ease; /* 滑动平滑过渡 */
 }
 
 /* 叠放顺序 bottom -> middle1 -> middle2 -> top */
@@ -55,7 +55,7 @@ body { background: #f8f8f8; }
   font-size: 0.9rem;
 }
 
-/* 三滑块 */
+/* 单滑块 */
 .slider-container {
   max-width: 900px;
   margin: 5px auto 30px auto;
@@ -111,7 +111,7 @@ body { background: #f8f8f8; }
     <h2 class="title is-3 has-text-centered">Brief Introduction</h2>
     <div class="content has-text-justified">
       <p>
-        Scene reconstruction from sparse-view satellite images remains challenging due to insufficient geometric constraints. 
+        Abstract. Scene reconstruction from sparse-view satellite images remains challenging due to insufficient geometric constraints. 
         SkySplat++ extends our previous 3DGS method, refining Gaussian representations in a coarse-to-fine manner for robust large-scale structure and fine textures. 
         Height-guided hierarchical cost volumes and hybrid height supervision improve accuracy, achieving significant speedup and lower MAE compared to baselines.
       </p>
@@ -173,22 +173,23 @@ body { background: #f8f8f8; }
         }
       ];
 
-      function updateImagesTripleSlider(aoiId){
-        const val1 = document.getElementById(aoiId+"_slider1").value;
-        const val2 = document.getElementById(aoiId+"_slider2").value;
-        const val3 = document.getElementById(aoiId+"_slider3").value;
+      function updateImagesSingleSlider(aoiId){
+        const val = document.getElementById(aoiId+"_slider").value;
 
-        // 分别控制 middle1 / middle2 / top
-        document.getElementById(aoiId+"_middle1").style.clipPath = `inset(0 ${100-val1}% 0 0)`;
-        document.getElementById(aoiId+"_middle2").style.clipPath = `inset(0 ${100-val2}% 0 0)`;
-        document.getElementById(aoiId+"_top").style.clipPath = `inset(0 ${100-val3}% 0 0)`;
+        // 分段控制每张图的显示
+        const perc1 = Math.min(val*4, 100);       // middle1
+        const perc2 = Math.max(Math.min((val-25)*4, 100), 0); // middle2
+        const perc3 = Math.max(Math.min((val-50)*4, 100), 0); // top
+
+        document.getElementById(aoiId+"_middle1").style.clipPath = `inset(0 ${100-perc1}% 0 0)`;
+        document.getElementById(aoiId+"_middle2").style.clipPath = `inset(0 ${100-perc2}% 0 0)`;
+        document.getElementById(aoiId+"_top").style.clipPath = `inset(0 ${100-perc3}% 0 0)`;
       }
 
-      function initTripleSlider(aoiId){
-        ["slider1","slider2","slider3"].forEach(s=>{
-          document.getElementById(aoiId+"_"+s).addEventListener("input",()=>updateImagesTripleSlider(aoiId));
-        });
-        updateImagesTripleSlider(aoiId);
+      function initSingleSlider(aoiId){
+        const slider = document.getElementById(aoiId+"_slider");
+        slider.addEventListener("input",()=>updateImagesSingleSlider(aoiId));
+        updateImagesSingleSlider(aoiId);
       }
 
       window.onload = function(){
@@ -208,20 +209,14 @@ body { background: #f8f8f8; }
             <img src="${aoi.paths[3]}" class="top" id="${aoi.id}_top">
           </div>`;
 
-          // 三滑块
-          let slidersHTML = `
+          // 单滑块
+          let sliderHTML = `
           <div class="slider-container">
-            <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider1">
-          </div>
-          <div class="slider-container">
-            <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider2">
-          </div>
-          <div class="slider-container">
-            <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider3">
+            <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider">
           </div>`;
 
-          container.innerHTML += `<h3 class="title is-5 has-text-centered">AOI: ${aoi.name}</h3>${labelsHTML}${imagesHTML}${slidersHTML}`;
-          initTripleSlider(aoi.id);
+          container.innerHTML += `<h3 class="title is-5 has-text-centered">AOI: ${aoi.name}</h3>${labelsHTML}${imagesHTML}${sliderHTML}`;
+          initSingleSlider(aoi.id);
         });
       }
     </script>
