@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SkySplat++: Four-Method Comparison</title>
 
-<!-- Styles -->
 <link rel="stylesheet" href="static/css/bulma.min.css">
 <style>
   .compare-column {
@@ -25,9 +24,9 @@
     top: 0;
     left: 0;
   }
-  .img-front {
-    z-index: 2;
-    clip-path: inset(0 50% 0 0); /* 默认显示左半边 */
+  .img-layer {
+    z-index: 1;
+    clip-path: inset(0 0 0 0);
   }
   .slider-container {
     display: flex;
@@ -41,139 +40,93 @@
 </style>
 
 <script>
-  function slideCompare(value, imgId) {
-    const img = document.getElementById(imgId);
-    img.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
+  // value1/value2/value3: 0-100
+  function slideFourLayer(sceneId) {
+    const s1 = document.getElementById(sceneId + '_slider1').value;
+    const s2 = document.getElementById(sceneId + '_slider2').value;
+    const s3 = document.getElementById(sceneId + '_slider3').value;
+
+    // HiSplat
+    document.getElementById(sceneId + '_HiSplat').style.clipPath = `inset(0 ${100 - s1}% 0 0)`;
+    // SkySplat
+    document.getElementById(sceneId + '_SkySplat').style.clipPath = `inset(0 ${100 - s2}% 0 0)`;
+    // SkySplatV2
+    document.getElementById(sceneId + '_SkySplatV2').style.clipPath = `inset(0 ${100 - s3}% 0 0)`;
   }
 </script>
-
 </head>
 <body>
+
+<!-- Intro 保留 -->
 <section class="section is-light">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Four-Method Comparison</h2>
+    <h2 class="title is-3 has-text-centered">SkySplat++ Four-Method Comparison</h2>
+    <p class="has-text-centered">Compare MVSplat, HiSplat, SkySplat, and SkySplatV2 on different AOIs.</p>
+  </div>
+</section>
+
+<section class="section is-light">
+  <div class="container is-max-desktop">
 
     <!-- ================= AOI: JAX072 ================= -->
     <h3 class="title is-5 has-text-centered">AOI: JAX072</h3>
-    <div class="columns is-gapless is-variable is-2">
-
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">MVSplat</p>
-        <div class="image-compare-container">
-          <img src="static/images/MVSplat_JAX_Tile_072-image.png">
-        </div>
+    <div class="compare-column">
+      <div class="image-compare-container">
+        <img src="static/images/MVSplat_JAX_Tile_072-image.png" class="img-layer" id="JAX072_MVSplat">
+        <img src="static/images/HiSplat_JAX_Tile_072-image.png" class="img-layer" id="JAX072_HiSplat">
+        <img src="static/images/SkySplat_JAX_Tile_072-image.png" class="img-layer" id="JAX072_SkySplat">
+        <img src="static/images/SkySplatV2_JAX_Tile_072-image.png" class="img-layer" id="JAX072_SkySplatV2">
       </div>
-
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">HiSplat</p>
-        <div class="image-compare-container">
-          <img src="static/images/HiSplat_JAX_Tile_072-image.png">
-        </div>
+      <div class="slider-container">
+        <input type="range" min="0" max="100" value="50" class="slider"
+               id="JAX072_slider1" oninput="slideFourLayer('JAX072')">
+        <input type="range" min="0" max="100" value="50" class="slider"
+               id="JAX072_slider2" oninput="slideFourLayer('JAX072')">
+        <input type="range" min="0" max="100" value="50" class="slider"
+               id="JAX072_slider3" oninput="slideFourLayer('JAX072')">
       </div>
-
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">SkySplat</p>
-        <div class="image-compare-container">
-          <img src="static/images/SkySplat_JAX_Tile_072-image.png">
-        </div>
-      </div>
-
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">SkySplatV2 (Ours)</p>
-        <div class="image-compare-container">
-          <img src="static/images/SkySplatV2_JAX_Tile_072-image.png"
-               class="img-front"
-               id="jax072_front">
-        </div>
-        <div class="slider-container">
-          <input type="range" min="0" max="100" value="50" class="slider"
-                 oninput="slideCompare(this.value, 'jax072_front')">
-        </div>
-      </div>
-
     </div>
 
     <!-- ================= AOI: JAX079 ================= -->
     <h3 class="title is-5 has-text-centered">AOI: JAX079</h3>
-    <div class="columns is-gapless is-variable is-2">
-
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">MVSplat</p>
-        <div class="image-compare-container">
-          <img src="static/images/MVSplat_JAX_Tile_079-image.png">
-        </div>
+    <div class="compare-column">
+      <div class="image-compare-container">
+        <img src="static/images/MVSplat_JAX_Tile_079-image.png" class="img-layer" id="JAX079_MVSplat">
+        <img src="static/images/HiSplat_JAX_Tile_079-image.png" class="img-layer" id="JAX079_HiSplat">
+        <img src="static/images/SkySplat_JAX_Tile_079-image.png" class="img-layer" id="JAX079_SkySplat">
+        <img src="static/images/SkySplatV2_JAX_Tile_079-image.png" class="img-layer" id="JAX079_SkySplatV2">
       </div>
-
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">HiSplat</p>
-        <div class="image-compare-container">
-          <img src="static/images/HiSplat_JAX_Tile_079-image.png">
-        </div>
+      <div class="slider-container">
+        <input type="range" min="0" max="100" value="50" class="slider"
+               id="JAX079_slider1" oninput="slideFourLayer('JAX079')">
+        <input type="range" min="0" max="100" value="50" class="slider"
+               id="JAX079_slider2" oninput="slideFourLayer('JAX079')">
+        <input type="range" min="0" max="100" value="50" class="slider"
+               id="JAX079_slider3" oninput="slideFourLayer('JAX079')">
       </div>
-
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">SkySplat</p>
-        <div class="image-compare-container">
-          <img src="static/images/SkySplat_JAX_Tile_079-image.png">
-        </div>
-      </div>
-
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">SkySplatV2 (Ours)</p>
-        <div class="image-compare-container">
-          <img src="static/images/SkySplatV2_JAX_Tile_079-image.png"
-               class="img-front"
-               id="jax079_front">
-        </div>
-        <div class="slider-container">
-          <input type="range" min="0" max="100" value="50" class="slider"
-                 oninput="slideCompare(this.value, 'jax079_front')">
-        </div>
-      </div>
-
     </div>
 
     <!-- ================= AOI: OMA212 ================= -->
     <h3 class="title is-5 has-text-centered">AOI: OMA212</h3>
-    <div class="columns is-gapless is-variable is-2">
-
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">MVSplat</p>
-        <div class="image-compare-container">
-          <img src="static/images/MVSplat_OMA_Tile_212-image.png">
-        </div>
+    <div class="compare-column">
+      <div class="image-compare-container">
+        <img src="static/images/MVSplat_OMA_Tile_212-image.png" class="img-layer" id="OMA212_MVSplat">
+        <img src="static/images/HiSplat_OMA_Tile_212-image.png" class="img-layer" id="OMA212_HiSplat">
+        <img src="static/images/SkySplat_OMA_Tile_212-image.png" class="img-layer" id="OMA212_SkySplat">
+        <img src="static/images/SkySplatV2_OMA_Tile_212-image.png" class="img-layer" id="OMA212_SkySplatV2">
       </div>
-
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">HiSplat</p>
-        <div class="image-compare-container">
-          <img src="static/images/HiSplat_OMA_Tile_212-image.png">
-        </div>
+      <div class="slider-container">
+        <input type="range" min="0" max="100" value="50" class="slider"
+               id="OMA212_slider1" oninput="slideFourLayer('OMA212')">
+        <input type="range" min="0" max="100" value="50" class="slider"
+               id="OMA212_slider2" oninput="slideFourLayer('OMA212')">
+        <input type="range" min="0" max="100" value="50" class="slider"
+               id="OMA212_slider3" oninput="slideFourLayer('OMA212')">
       </div>
-
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">SkySplat</p>
-        <div class="image-compare-container">
-          <img src="static/images/SkySplat_OMA_Tile_212-image.png">
-        </div>
-      </div>
-
-      <div class="column compare-column">
-        <p class="has-text-centered method-title">SkySplatV2 (Ours)</p>
-        <div class="image-compare-container">
-          <img src="static/images/SkySplatV2_OMA_Tile_212-image.png"
-               class="img-front"
-               id="oma212_front">
-        </div>
-        <div class="slider-container">
-          <input type="range" min="0" max="100" value="50" class="slider"
-                 oninput="slideCompare(this.value, 'oma212_front')">
-        </div>
-      </div>
-
     </div>
 
   </div>
 </section>
+
 </body>
 </html>
