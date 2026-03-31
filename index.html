@@ -191,12 +191,8 @@ body { background: #f8f8f8; }
       window.onload = function(){
           const container = document.getElementById("aoi-containers");
 
-          // 1. 生成所有 AOI HTML
           aois.forEach(aoi=>{
-              let labelsHTML = '<div class="method-labels">';
-              aoi.methods.forEach(m=>labelsHTML+=`<span>${m}</span>`);
-              labelsHTML += '</div>';
-
+              // 图片叠加
               let imagesHTML = `
               <div class="image-compare-container" id="${aoi.id}_container">
                   <img src="${aoi.paths[0]}" class="bottom">
@@ -205,17 +201,20 @@ body { background: #f8f8f8; }
                   <img src="${aoi.paths[3]}" class="top" id="${aoi.id}_top">
               </div>`;
 
-              let sliderHTML = `
-              <div class="slider-container">
-                  <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider1">
-                  <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider2">
-                  <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider3">
-              </div>`;
+              // 滑块和方法名一起显示
+              let sliderHTML = `<div class="slider-container">`;
+              aoi.methods.slice(1).forEach((method, idx)=>{
+                  sliderHTML += `
+                  <div style="flex:1; text-align:center;">
+                    <div style="margin-bottom:4px; font-weight:bold;">${method}</div>
+                    <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider${idx+1}">
+                  </div>`;
+              });
+              sliderHTML += `</div>`;
 
-              container.innerHTML += `<h3 class="title is-5 has-text-centered">AOI: ${aoi.name}</h3>${labelsHTML}${imagesHTML}${sliderHTML}`;
+              container.innerHTML += `<h3 class="title is-5 has-text-centered">AOI: ${aoi.name}</h3>${imagesHTML}${sliderHTML}`;
           });
 
-          // 2. 初始化滑块绑定事件
           aois.forEach(aoi=>{
               ["slider1","slider2","slider3"].forEach(sliderSuffix=>{
                   const slider = document.getElementById(aoi.id+"_"+sliderSuffix);
@@ -223,11 +222,10 @@ body { background: #f8f8f8; }
                       slider.addEventListener("input",()=>updateImagesThreeSliders(aoi.id));
                   }
               });
-              updateImagesThreeSliders(aoi.id); // 初始化 clip-path
+              updateImagesThreeSliders(aoi.id); // 初始化
           });
       }
     </script>
-
   </div>
 </section>
 
