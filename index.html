@@ -68,11 +68,23 @@
 
   </style>
   
-  <script>
-  function slideCompare(val, imgId) {
-    const img = document.getElementById(imgId);
-    img.style.clipPath = `inset(0 ${100 - val}% 0 0)`;
-  }
+<script>
+function slideCompare(val, imgId) {
+  const img = document.getElementById(imgId);
+  img.style.clipPath = `inset(0 ${100 - val}% 0 0)`;
+}
+</script>
+
+<script>
+function slideCompareMulti(val, imgIds) {
+  const percent = 100 - val;
+  imgIds.forEach(id => {
+    const img = document.getElementById(id);
+    if (img) {
+      img.style.clipPath = `inset(0 ${percent}% 0 0)`;
+    }
+  });
+}
 </script>
 </head>
 
