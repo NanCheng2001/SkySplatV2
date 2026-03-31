@@ -148,10 +148,46 @@ body { background: #f8f8f8; }
 
     <script>
       const aois = [
-        {id: "jax072_4", name: "JAX072", methods: ["MVSplat","HiSplat","SkySplat","SkySplat++"]},
-        {id: "jax079_4", name: "JAX079", methods: ["MVSplat","HiSplat","SkySplat","SkySplat++"]},
-        {id: "oma212_4", name: "OMA212", methods: ["MVSplat","HiSplat","SkySplat","SkySplat++"]},
-        {id: "oma315_4", name: "OMA315", methods: ["MVSplat","HiSplat","SkySplat","SkySplat++"]}
+        {
+          id: "jax072_4", name: "JAX072",
+          paths: [
+            "static/images/MVSplat_JAX_Tile_072-image.png",
+            "static/images/HiSplat_JAX_Tile_072-image.png",
+            "static/images/SkySplat_JAX_Tile_072-image.png",
+            "static/images/SkySplatV2_JAX_Tile_072-image.png"
+          ],
+          methods: ["MVSplat","HiSplat","SkySplat","SkySplat++"]
+        },
+        {
+          id: "jax079_4", name: "JAX079",
+          paths: [
+            "static/images/MVSplat_JAX_Tile_079-image.png",
+            "static/images/HiSplat_JAX_Tile_079-image.png",
+            "static/images/SkySplat_JAX_Tile_079-image.png",
+            "static/images/SkySplatV2_JAX_Tile_079-image.png"
+          ],
+          methods: ["MVSplat","HiSplat","SkySplat","SkySplat++"]
+        },
+        {
+          id: "oma212_4", name: "OMA212",
+          paths: [
+            "static/images/MVSplat_OMA_Tile_212-image.png",
+            "static/images/HiSplat_OMA_Tile_212-image.png",
+            "static/images/SkySplat_OMA_Tile_212-image.png",
+            "static/images/SkySplatV2_OMA_Tile_212-image.png"
+          ],
+          methods: ["MVSplat","HiSplat","SkySplat","SkySplat++"]
+        },
+        {
+          id: "oma315_4", name: "OMA315",
+          paths: [
+            "static/images/MVSplat_OMA_Tile_315-image.png",
+            "static/images/HiSplat_OMA_Tile_315-image.png",
+            "static/images/SkySplat_OMA_Tile_315-image.png",
+            "static/images/SkySplatV2_OMA_Tile_315-image.png"
+          ],
+          methods: ["MVSplat","HiSplat","SkySplat","SkySplat++"]
+        }
       ];
 
       function updateFourImages(aoiId){
@@ -182,10 +218,10 @@ body { background: #f8f8f8; }
           // 图片叠放
           let imagesHTML = `
           <div class="image-compare-container" id="${aoi.id}_container">
-            <img src="static/images/${aoi.methods[0]}_${aoi.name}_image.png" class="bottom">
-            <img src="static/images/${aoi.methods[1]}_${aoi.name}_image.png" class="middle1" id="${aoi.id}_middle1">
-            <img src="static/images/${aoi.methods[2]}_${aoi.name}_image.png" class="middle2" id="${aoi.id}_middle2">
-            <img src="static/images/${aoi.methods[3]}_${aoi.name}_image.png" class="top" id="${aoi.id}_top">
+            <img src="${aoi.paths[0]}" class="bottom">
+            <img src="${aoi.paths[1]}" class="middle1" id="${aoi.id}_middle1">
+            <img src="${aoi.paths[2]}" class="middle2" id="${aoi.id}_middle2">
+            <img src="${aoi.paths[3]}" class="top" id="${aoi.id}_top">
           </div>`;
 
           // 滑块
