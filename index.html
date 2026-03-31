@@ -45,7 +45,22 @@ body { background: #f8f8f8; }
 .image-compare-container img.middle2 { z-index: 3; }
 .image-compare-container img.top { z-index: 4; }
 
-/* 三滑块容器 */
+/* ===== Method Labels on Images ===== */
+.image-label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 8px;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  font-weight: bold;
+  border-radius: 6px;
+  font-size: 0.9em;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ===== Slider Container ===== */
 .slider-container {
   max-width: 900px;
   margin: 5px auto 30px auto;
@@ -181,10 +196,13 @@ body { background: #f8f8f8; }
               // 图片叠加
               let imagesHTML = `
               <div class="image-compare-container" id="${aoi.id}_container">
-                  <img src="${aoi.paths[0]}" class="bottom" id="${aoi.id}_bottom">
-                  <img src="${aoi.paths[1]}" class="middle1" id="${aoi.id}_middle1">
-                  <img src="${aoi.paths[2]}" class="middle2" id="${aoi.id}_middle2">
-                  <img src="${aoi.paths[3]}" class="top" id="${aoi.id}_top">
+                  ${aoi.paths.map((path, idx)=>{
+                      const imgId = idx===0 ? "bottom" : idx===1 ? "middle1" : idx===2 ? "middle2" : "top";
+                      return `
+                      <img src="${path}" class="${imgId}" id="${aoi.id}_${imgId}">
+                      <div class="image-label" id="${aoi.id}_label${idx}">${aoi.methods[idx]}</div>
+                      `;
+                  }).join("")}
               </div>`;
 
               // 四个滑块和方法名
