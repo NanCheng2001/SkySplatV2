@@ -33,15 +33,16 @@ body { background: #f8f8f8; }
   height: 100%;
   display: block;
   object-fit: cover;
-}
-
-/* 三图滑块遮罩 */
-.image-compare-container img.top {
   position: absolute;
   top: 0;
   left: 0;
-  width: 50%; /* 初始滑块值 */
 }
+
+/* 初始宽度，叠放顺序为 bottom -> middle1 -> middle2 -> top */
+.image-compare-container img.bottom { z-index: 1; width: 100%; }
+.image-compare-container img.middle1 { z-index: 2; width: 75%; }
+.image-compare-container img.middle2 { z-index: 3; width: 50%; }
+.image-compare-container img.top { z-index: 4; width: 25%; }
 
 /* 方法名称 */
 .method-labels {
@@ -143,39 +144,19 @@ body { background: #f8f8f8; }
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Comparison with Feed-forward Methods</h2>
 
-    <!-- ================= AOI JAX072 三方法示例 ================= -->
-    <h3 class="title is-5 has-text-centered">AOI: JAX072 (Three Methods)</h3>
+    <!-- ================= AOIs 四方法示例 ================= -->
+    <script>
+      const aois = [
+        {id: "jax072_4", name: "JAX072", methods: ["MVSplat","HiSplat","SkySplat","SkySplat++"]},
+        {id: "jax079_4", name: "JAX079", methods: ["MVSplat","HiSplat","SkySplat","SkySplat++"]},
+        {id: "oma212_4", name: "OMA212", methods: ["MVSplat","HiSplat","SkySplat","SkySplat++"]},
+        {id: "oma315_4", name: "OMA315", methods: ["MVSplat","HiSplat","SkySplat","SkySplat++"]}
+      ];
+    </script>
 
-    <div class="method-labels">
-      <span>MVSplat</span>
-      <span>HiSplat</span>
-      <span>SkySplat++</span>
-    </div>
-    <div class="image-compare-container" id="jax072_3_container">
-      <img src="static/images/MVSplat_JAX_Tile_072-image.png" class="bottom">
-      <img src="static/images/HiSplat_JAX_Tile_072-image.png" class="middle top" id="jax072_3_middle">
-      <img src="static/images/SkySplatV2_JAX_Tile_072-image.png" class="top top" id="jax072_3_top">
-    </div>
-    <div class="slider-container">
-      <input type="range" min="0" max="100" value="50" id="jax072_3_slider1">
-      <input type="range" min="0" max="100" value="50" id="jax072_3_slider2">
-      <p>Slider1: HiSplat vs MVSplat, Slider2: SkySplat++ vs HiSplat</p>
-    </div>
-
-    <!-- ================= AOI JAX079 双方法示例 ================= -->
-    <h3 class="title is-5 has-text-centered">AOI: JAX079</h3>
-
-    <div class="method-labels">
-      <span>SkySplat</span>
-      <span>SkySplat++</span>
-    </div>
-    <div class="image-compare-container" id="jax079_2_container">
-      <img src="static/images/SkySplat_JAX_Tile_079-image.png" id="jax079_2_0">
-      <img src="static/images/SkySplatV2_JAX_Tile_079-image.png" id="jax079_2_1">
-    </div>
-    <div class="slider-container">
-      <input type="range" min="0" max="100" value="50" id="jax079_2_slider">
-      <p>Drag slider to compare SkySplat vs SkySplat++</p>
+    <!-- AOI 容器 -->
+    <div id="aoi-containers">
+      <!-- 这里JS会生成四图叠放容器 -->
     </div>
 
   </div>
@@ -208,46 +189,63 @@ body { background: #f8f8f8; }
 </footer>
 
 <script>
-// ===== 双图滑块 =====
-function updateTwoImages(aoiId, sliderValue){
-  const img2 = document.getElementById(aoiId+"_1");
-  img2.style.width = sliderValue + "%";
-}
-
-function initSlider(aoiId){
-  const slider = document.getElementById(aoiId+"_slider");
-  slider.addEventListener("input", ()=> updateTwoImages(aoiId, Number(slider.value)));
-  updateTwoImages(aoiId, Number(slider.value));
-}
-
-// ===== 三图滑块 =====
-function updateThreeImages(aoiId){
+// ===== 四图滑块 =====
+function updateFourImages(aoiId){
   const slider1 = document.getElementById(aoiId+"_slider1");
   const slider2 = document.getElementById(aoiId+"_slider2");
-  const middle = document.getElementById(aoiId+"_middle");
+  const slider3 = document.getElementById(aoiId+"_slider3");
+  const middle1 = document.getElementById(aoiId+"_middle1");
+  const middle2 = document.getElementById(aoiId+"_middle2");
   const top = document.getElementById(aoiId+"_top");
 
-  middle.style.width = slider1.value + "%";
-  top.style.width = slider2.value + "%";
+  middle1.style.width = slider1.value + "%";
+  middle2.style.width = slider2.value + "%";
+  top.style.width = slider3.value + "%";
 }
 
-function initThreeSlider(aoiId){
+function initFourSlider(aoiId){
   const s1 = document.getElementById(aoiId+"_slider1");
   const s2 = document.getElementById(aoiId+"_slider2");
-  [s1, s2].forEach(slider => slider.addEventListener("input", ()=> updateThreeImages(aoiId)));
-  updateThreeImages(aoiId);
+  const s3 = document.getElementById(aoiId+"_slider3");
+  [s1, s2, s3].forEach(slider => slider.addEventListener("input", ()=> updateFourImages(aoiId)));
+  updateFourImages(aoiId);
 }
 
-// 初始化所有滑块
+// ===== 动态生成AOI容器 =====
 window.onload = function(){
-  const twoSliders = ['jax079_2'];
-  twoSliders.forEach(id => initSlider(id));
+  const container = document.getElementById("aoi-containers");
+  aois.forEach(aoi=>{
+    // 方法标签
+    let labelsHTML = '<div class="method-labels">';
+    aoi.methods.forEach(m=>labelsHTML += `<span>${m}</span>`);
+    labelsHTML += '</div>';
 
-  const threeSliders = ['jax072_3'];
-  threeSliders.forEach(id => initThreeSlider(id));
+    // 图片叠放
+    let imagesHTML = `
+      <div class="image-compare-container" id="${aoi.id}_container">
+        <img src="static/images/${aoi.methods[0]}_${aoi.name}_image.png" class="bottom">
+        <img src="static/images/${aoi.methods[1]}_${aoi.name}_image.png" class="middle1" id="${aoi.id}_middle1">
+        <img src="static/images/${aoi.methods[2]}_${aoi.name}_image.png" class="middle2" id="${aoi.id}_middle2">
+        <img src="static/images/${aoi.methods[3]}_${aoi.name}_image.png" class="top" id="${aoi.id}_top">
+      </div>
+    `;
+
+    // 滑块
+    let slidersHTML = `
+      <div class="slider-container">
+        <input type="range" min="0" max="100" value="50" id="${aoi.id}_slider1">
+        <input type="range" min="0" max="100" value="50" id="${aoi.id}_slider2">
+        <input type="range" min="0" max="100" value="50" id="${aoi.id}_slider3">
+        <p>Slider1: ${aoi.methods[1]} vs ${aoi.methods[0]}, Slider2: ${aoi.methods[2]} vs ${aoi.methods[1]}, Slider3: ${aoi.methods[3]} vs ${aoi.methods[2]}</p>
+      </div>
+    `;
+
+    container.innerHTML += `<h3 class="title is-5 has-text-centered">AOI: ${aoi.name}</h3>${labelsHTML}${imagesHTML}${slidersHTML}`;
+
+    initFourSlider(aoi.id);
+  });
 };
 </script>
 
 </body>
 </html>
-你这个滑块也太傻比了，不能把三个方法的图叠在一起，下面搞两个滑块，那样拖动吗。。输出修改后的全部代码，包括introduction这种
