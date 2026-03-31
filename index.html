@@ -35,8 +35,8 @@ body { background: #f8f8f8; }
   height: 100%;
   width: 100%;
   object-fit: cover;
-  clip-path: inset(0 100% 0 0); /* 初始完全隐藏 */
-  transition: clip-path 0.2s ease; /* 滑动平滑过渡 */
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.2s ease;
 }
 
 /* 叠放顺序 bottom -> middle1 -> middle2 -> top */
@@ -177,51 +177,54 @@ body { background: #f8f8f8; }
       ];
 
       function updateImagesThreeSliders(aoiId){
-        const val1 = document.getElementById(aoiId+"_slider1").value;
-        const val2 = document.getElementById(aoiId+"_slider2").value;
-        const val3 = document.getElementById(aoiId+"_slider3").value;
+          const val1 = parseInt(document.getElementById(aoiId+"_slider1").value);
+          const val2 = parseInt(document.getElementById(aoiId+"_slider2").value);
+          const val3 = parseInt(document.getElementById(aoiId+"_slider3").value);
 
-        document.getElementById(aoiId+"_middle1").style.clipPath = `inset(0 ${100-val1}% 0 0)`;
-        document.getElementById(aoiId+"_middle2").style.clipPath = `inset(0 ${100-val2}% 0 0)`;
-        document.getElementById(aoiId+"_top").style.clipPath = `inset(0 ${100-val3}% 0 0)`;
+          document.getElementById(aoiId+"_middle1").style.clipPath = `inset(0 ${Math.min(Math.max(100-val1,0),100)}% 0 0)`;
+          document.getElementById(aoiId+"_middle2").style.clipPath = `inset(0 ${Math.min(Math.max(100-val2,0),100)}% 0 0)`;
+          document.getElementById(aoiId+"_top").style.clipPath = `inset(0 ${Math.min(Math.max(100-val3,0),100)}% 0 0)`;
       }
 
       function initThreeSliders(aoiId){
-        ["slider1","slider2","slider3"].forEach(sliderSuffix=>{
-          const slider = document.getElementById(aoiId+"_"+sliderSuffix);
-          slider.addEventListener("input",()=>updateImagesThreeSliders(aoiId));
-        });
-        updateImagesThreeSliders(aoiId);
+          ["slider1","slider2","slider3"].forEach(sliderSuffix=>{
+              const slider = document.getElementById(aoiId+"_"+sliderSuffix);
+              if(slider){
+                  slider.addEventListener("input",()=>updateImagesThreeSliders(aoiId));
+              }
+          });
+          // 延迟初始化，确保 DOM 元素存在
+          setTimeout(()=>updateImagesThreeSliders(aoiId),50);
       }
 
       window.onload = function(){
-        const container = document.getElementById("aoi-containers");
-        aois.forEach(aoi=>{
-          // 方法标签
-          let labelsHTML = '<div class="method-labels">';
-          aoi.methods.forEach(m=>labelsHTML+=`<span>${m}</span>`);
-          labelsHTML += '</div>';
+          const container = document.getElementById("aoi-containers");
+          aois.forEach(aoi=>{
+              // 方法标签
+              let labelsHTML = '<div class="method-labels">';
+              aoi.methods.forEach(m=>labelsHTML+=`<span>${m}</span>`);
+              labelsHTML += '</div>';
 
-          // 图片叠放
-          let imagesHTML = `
-          <div class="image-compare-container" id="${aoi.id}_container">
-            <img src="${aoi.paths[0]}" class="bottom">
-            <img src="${aoi.paths[1]}" class="middle1" id="${aoi.id}_middle1">
-            <img src="${aoi.paths[2]}" class="middle2" id="${aoi.id}_middle2">
-            <img src="${aoi.paths[3]}" class="top" id="${aoi.id}_top">
-          </div>`;
+              // 图片叠放
+              let imagesHTML = `
+              <div class="image-compare-container" id="${aoi.id}_container">
+                  <img src="${aoi.paths[0]}" class="bottom">
+                  <img src="${aoi.paths[1]}" class="middle1" id="${aoi.id}_middle1">
+                  <img src="${aoi.paths[2]}" class="middle2" id="${aoi.id}_middle2">
+                  <img src="${aoi.paths[3]}" class="top" id="${aoi.id}_top">
+              </div>`;
 
-          // 三滑块
-          let sliderHTML = `
-          <div class="slider-container">
-            <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider1">
-            <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider2">
-            <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider3">
-          </div>`;
+              // 三滑块
+              let sliderHTML = `
+              <div class="slider-container">
+                  <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider1">
+                  <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider2">
+                  <input type="range" min="0" max="100" value="0" id="${aoi.id}_slider3">
+              </div>`;
 
-          container.innerHTML += `<h3 class="title is-5 has-text-centered">AOI: ${aoi.name}</h3>${labelsHTML}${imagesHTML}${sliderHTML}`;
-          initThreeSliders(aoi.id);
-        });
+              container.innerHTML += `<h3 class="title is-5 has-text-centered">AOI: ${aoi.name}</h3>${labelsHTML}${imagesHTML}${sliderHTML}`;
+              initThreeSliders(aoi.id);
+          });
       }
     </script>
 
