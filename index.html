@@ -123,9 +123,16 @@ body { background: #f8f8f8; }
     <h2 class="title is-3 has-text-centered">Brief Introduction</h2>
     <div class="content has-text-justified">
       <p>
-        Abstract. Scene reconstruction from sparse-view satellite images remains challenging due to insufficient geometric constraints. 
-        SkySplat++ extends our previous 3DGS method, refining Gaussian representations in a coarse-to-fine manner for robust large-scale structure and fine textures. 
-        Height-guided hierarchical cost volumes and hybrid height supervision improve accuracy, achieving significant speedup and lower MAE compared to baselines.
+        Abstract. Scene reconstruction from sparse-view satellite images remains a challenging task due to insufficient geometric constraints.
+            While generalizable 3D Gaussian Splatting (3DGS) methods have shown high efficiency for novel-view synthesis, 
+            existing methods are often unsuitable for satellite imagery due to incompatibility with the rational polynomial coefficient (RPC) model and limited generalization capability. 
+            In this work, we present SkySplat++, a hierarchical generalizable 3DGS framework that extends our previous SkySplat to further improve scene reconstruction. 
+            SkySplat++ refines Gaussians in a coarse-to-fine manner, enabling robust modeling of both large-scale scene structures and fine-grained texture details.
+            To improve reconstruction under sparse-view conditions, a Height-Guided Hierarchical Cost Volume (HG-HCV) module is integrated to enable more accurate cost volume construction.
+            Additionally, a hybrid height supervision strategy is employed to stabilize height estimation under radiometric inconsistencies. 
+            Compared to per-scene optimization methods, SkySplat++ achieves up to 1070 times speed up over EOGS with higher accuracy. 
+            It also outperforms generalizable 3DGS baselines, achieving a reduction in mean absolute error of 10.38--14.81\,m across two benchmarks, 
+            and demonstrates strong cross-dataset generalization on the MVS3D test set.
       </p>
     </div>
     <div class="has-text-centered">
