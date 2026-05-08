@@ -71,7 +71,8 @@ body { background: #f8f8f8; }
   <div class="hero-body">
     <div class="container is-max-desktop has-text-centered">
       <h1 class="title is-1">
-        SkySplat++: Hierarchical 3D Gaussian Splatting for Generalizable Sparse-View Reconstruction
+        SkySplat++
+        <!-- SkySplat++: Hierarchical 3D Gaussian Splatting for Generalizable Sparse-View Reconstruction from Multi-Temporal Satellite Imagery -->
       </h1>
       <div class="publication-links" style="display:flex; justify-content:center; gap:10px; flex-wrap: wrap; margin-top:10px;">
         
@@ -117,29 +118,7 @@ body { background: #f8f8f8; }
   </div>
 </section>
 
-<!-- ================= Brief Introduction ================= -->
-<section class="section is-light">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Brief Introduction</h2>
-    <div class="content has-text-justified">
-      <p>
-        Abstract. Scene reconstruction from sparse-view satellite images remains a challenging task due to insufficient geometric constraints.
-            While generalizable 3D Gaussian Splatting (3DGS) methods have shown high efficiency for novel-view synthesis, 
-            existing methods are often unsuitable for satellite imagery due to incompatibility with the rational polynomial coefficient (RPC) model and limited generalization capability. 
-            In this work, we present SkySplat++, a hierarchical generalizable 3DGS framework that extends our previous SkySplat to further improve scene reconstruction. 
-            SkySplat++ refines Gaussians in a coarse-to-fine manner, enabling robust modeling of both large-scale scene structures and fine-grained texture details.
-            To improve reconstruction under sparse-view conditions, a Height-Guided Hierarchical Cost Volume (HG-HCV) module is integrated to enable more accurate cost volume construction.
-            Additionally, a hybrid height supervision strategy is employed to stabilize height estimation under radiometric inconsistencies. 
-            Compared to per-scene optimization methods, SkySplat++ achieves up to 36 times speed up over EOGS with higher accuracy. 
-            It also outperforms generalizable 3DGS baselines, achieving a reduction in mean absolute error of 10.38-14.81 m across two benchmarks, 
-            and demonstrates strong cross-dataset generalization on the MVS3D test set.
-      </p>
-    </div>
-    <div class="has-text-centered">
-      <img src="static/images/fig2_pipeline.png" alt="Overview of the SkySplat++ framework" style="width:100%; border-radius:12px;">
-    </div>
-  </div>
-</section>
+
 
 <!-- ================= AOI Comparisons ================= -->
 <section class="section is-light">
@@ -242,7 +221,7 @@ body { background: #f8f8f8; }
 <!-- ================= Results ================= -->
 <section class="section is-light">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Results</h2>
+    <h2 class="title is-3 has-text-centered">DSM Reconstruction Results</h2>
     <div class="has-text-centered">
       <img src="static/images/fig6_8_AoIs.png" alt="Experimental Results" style="width:100%; border-radius:12px;">
     </div>
